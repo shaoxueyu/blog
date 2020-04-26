@@ -1,0 +1,11 @@
+@font-face {
+	font-family: sunshineKing;
+	src: url(./smallker-sunshine.ttf) format('truetype');
+}
+@font-face {
+	font-family: smallkerBoom;
+	src: url(./barbarahand-webfont.woff2) format('woff2');
+}
+html {
+	font-family: sunshineKing;
+}

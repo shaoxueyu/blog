@@ -1,0 +1,260 @@
+<template>
+  <div id="nav-page">
+    <div class="nav-container clearfix">
+
+      <!-- log -->
+      <div class="nav-left-logo left">Smallker · Blog</div>
+      <!-- 登录 -->
+      <div class="nav-right-login right">
+        <el-button
+          type="primary"
+          size="small"
+        >登 &nbsp 录</el-button>
+        <el-button
+          type="success"
+          size="small"
+        >注 &nbsp 册</el-button>
+      </div>
+      <!-- 导航栏 -->
+      <div
+        class="small-nav"
+        @click="MenuActive"
+      ><span>Menu</span></div>
+      <ul class="nav-right-main-nav right clearfix">
+
+        <li
+          v-for="item in navList"
+          :key="item.path"
+          :class="['nav-li', 'left',{active:item.path === routes}]"
+        >
+          <router-link :to="item.path">{{item.pathName}}</router-link>
+        </li>
+      </ul>
+    </div>
+    <!-- 响应式导航栏 -->
+    <nav
+      :class="['nav-small',{active: navSmActive? true:false}]"
+      ref="navSmallRef"
+    >
+      <ul class="nav-ul-sm">
+        <li
+          class="nav-li-sm"
+          v-for="item in navList"
+          :key="item.path"
+        >
+          <router-link :to="item.path">
+            {{item.pathName}}
+          </router-link>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Nav",
+  data() {
+    return {
+      navSmActive: false,
+      navList: [
+        {
+          path: "/",
+          pathName: "首页"
+        },
+        {
+          path: "/blog",
+          pathName: "博客"
+        },
+        {
+          path: "/message",
+          pathName: "留言"
+        },
+        {
+          path: "/diary",
+          pathName: "日记",
+        },
+        {
+          path: "/links",
+          pathName: "友链"
+        },
+        {
+          path: "/about",
+          pathName: "关于"
+        }
+      ]
+    }
+  },
+  methods: {
+    MenuActive() {
+      this.navSmActive = !this.navSmActive
+    }
+  },
+  mounted() {
+    this.$refs["navSmallRef"].addEventListener("transitionend", function () {
+      console.log("过度效果完成");
+    })
+  },
+  computed: {
+    routes() {
+      return this.$route.path
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.nav-small {
+  position: absolute;
+  width: 0;
+  left: 0;
+  opacity: 0;
+  transition: 0.5s;
+  li {
+    padding: 15px 0;
+    cursor: pointer;
+    text-align: center;
+    height: 0;
+    transition: 0.5s;
+  }
+}
+.small-nav {
+  display: none;
+}
+#nav-page {
+  position: fixed;
+  box-sizing: border-box;
+  width: 100%;
+  height: 60px;
+  background-color: white;
+  padding: 0 50px;
+  border-bottom: 1px solid #e8e9e7;
+  .nav-container {
+    position: relative;
+    width: 1280px;
+    margin: 0 auto;
+    height: 100%;
+    .nav-left-logo {
+      font-family: smallkerBoom;
+      font-size: 40px;
+      height: 100%;
+      text-align: center;
+      line-height: 60px;
+      font-weight: bold;
+    }
+    .nav-right-login {
+      height: 100%;
+      line-height: 60px;
+    }
+
+    .nav-right-main-nav {
+      height: 100%;
+      line-height: 60px;
+      text-align: center;
+      margin-right: 7%;
+      li.nav-li.active {
+        a {
+          color: rgb(107, 195, 13);
+        }
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          width: 100%;
+          height: 2px;
+          margin: 0 auto;
+          background-color: rgb(107, 195, 13);
+        }
+      }
+      li.nav-li {
+        position: relative;
+        width: 75px;
+        padding: 0 1px;
+        a {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
+        &:hover {
+          a {
+            transition: 0.3s;
+            color: rgb(107, 195, 13);
+          }
+          &::after {
+            width: 100%;
+            transition: 0.5s;
+          }
+        }
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          width: 0;
+          height: 2px;
+          margin: 0 auto;
+          background-color: rgb(107, 195, 13);
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 1050px) {
+  .nav-left-logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    float: none;
+    width: 200px;
+    height: 100%;
+    margin: 0 auto;
+  }
+  .nav-small.active {
+    box-shadow: 0 0 10px 0 inset;
+    opacity: 1;
+    transition: 0.5s;
+    width: 100%;
+    li {
+      box-shadow: 0 0 1px 0 inset;
+      transition: 0.5s;
+      height: 25px;
+      line-height: 25px;
+    }
+  }
+  .nav-right-login {
+    float: none;
+    position: absolute;
+    left: calc(1% - 50px);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .nav-right-main-nav {
+    display: none;
+  }
+  .small-nav {
+    font-family: smallkerBoom;
+    font-size: 45px;
+    height: 100%;
+    display: block;
+    position: absolute;
+    right: calc(1% - 50px);
+    text-align: center;
+    line-height: 50px;
+    transform: translateY(5px);
+  }
+}
+@media screen and (max-width: 1350px) {
+  .nav-container {
+    transition: 0.5s;
+    width: 90% !important;
+  }
+}
+.el-button {
+  font-family: sunshineKing !important;
+  text-align: center;
+}
+</style>
