@@ -1,0 +1,6 @@
+.el-input__inner {
+  border-radius: 20px !important;
+}
+.el-input__inner:focus{
+  border: 1px transparent solid !important; 
+}

@@ -122,6 +122,7 @@ export default {
   display: none;
 }
 #nav-page {
+  z-index: 999;
   position: fixed;
   box-sizing: border-box;
   width: 100%;
