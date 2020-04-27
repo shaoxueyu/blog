@@ -14,15 +14,15 @@ const app = routesloader.getApp() //返回koa实例
 app.use(static(path.join(__dirname, './public')))
 app.use(bodyParser())
 
-app.use((ctx, next) => {
+app.use(async (ctx, next) => {
 	ctx.set('Access-Control-Allow-Origin', ctx.headers['host'])
 	//设置跨域
 	ctx.set('Access-Control-Allow-Credentials', 'true')
 	ctx.set('Access-Control-Allow-Methods', 'PUT,DELETE,OPTIONS')
-	next()
+	await next()
 })
 
-app.use((ctx, next) => {
+app.use(async (ctx, next) => {
 	console.log(
 		'method',
 		ctx.request.method,
@@ -32,7 +32,7 @@ app.use((ctx, next) => {
 		ctx.request.query,
 		ctx.request.body
 	)
-	next()
+	await next()
 })
 
 routesloader.start(conf)
