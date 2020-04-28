@@ -9,6 +9,6 @@ export const getArticleTagsInfo = async () => {
 }
 //博客热门文章
 export const getHotArticleInfo = async () => {
-	let { data, status } = await axios.get('/api/article/hotArticleInfo')
+	let { data, status } = await axios.get('/article/hotArticleInfo')
 	return { data, status }
 }

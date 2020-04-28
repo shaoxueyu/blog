@@ -20,8 +20,8 @@
           >
             <li
               class="search-acticle-li"
-              v-for="item in articleTagsList"
-              :key="item.pathName"
+              v-for="(item,index) in articleTagsList"
+              :key="index"
               @mouseleave="handleUlCoverOut"
             >
               <a :href="
@@ -37,8 +37,15 @@
 
         </div>
         <div class="aside-hot">
+          <h3>热门文章</h3>
           <ul class="aside-hot-ul">
-            <li class="aside-hot-li" data-index=1 ></li>
+            <li
+              v-for="(item,index) in hotArticleList"
+              :key="item.title"
+              class="aside-hot-li"
+              :data-index=index+1
+            ><a href="#">
+                {{item.title}} </a></li>
           </ul>
         </div>
         <div class="aside-recommond">评论</div>
@@ -56,7 +63,7 @@ export default {
     return {
       keywordSearch: "", //关键字搜索
       articleTagsList: [..."loading... ".repeat(6).split(" ").filter(item => item !== "")],
-      hotArticleList: [[..."loading... ".repeat(8).split(" ").filter(item => item !== "")]],
+      hotArticleList: [..."loading... ".repeat(8).split(" ").filter(item => item !== "")],
       liTopcover: 25
     }
   },
@@ -64,12 +71,13 @@ export default {
     //接口统一处理
     async handleApi() {
       let { status, data } = await getArticleTagsInfo()
-      if(status === 200){
-        this.articleList = data["data"].tags
+      if (status === 200) {
+        this.articleTagsList = data["data"].tags
       }
-      let {status:status1,data:data1} = await getHotArticleInfo()
-      if(status1 === 200){
-
+      let { status: status1, data: data1 } = await getHotArticleInfo()
+      if (status1 === 200) {
+        this.hotArticleList = data1.data
+        console.log(this.hotArticleList);
       }
     },
     handleUlCover(e) {
@@ -110,9 +118,68 @@ export default {
     padding: 35px 45px;
     background-color: pink;
     margin: 0 auto;
+    .aside-hot {
+      margin-top: 25px;
+      padding: 10px 25px;
+      background: white;
+      border-radius: 25px;
+      h3 {
+        padding: 15px 15px 7px;
+        line-height: 30px;
+        font-size: 20px;
+        border-bottom: 1px solid #e8e9e7;
+      }
+      ul.aside-hot-ul {
+        margin-top: 15px;
+        .aside-hot-li {
+          position: relative;
+          line-height: 32px;
+          &:nth-child(1)::before {
+            background-color: #e24d46;
+            color: #e8e9e7;
+          }
+          &:nth-child(2)::before {
+            background-color: #2ea7e0;
+            color: #e8e9e7;
+          }
+          &:nth-child(3)::before {
+            background-color: #6bc30d;
+            color: #e8e9e7;
+          }
+          a {
+            width: 72%;
+            display: block;
+            padding-left: 30px;
+            color: #787977 !important;
+            font-size: 14px;
+            cursor: pointer;
+            &:hover {
+              color: #67c23a !important;
+            }
+          }
+
+          &::before {
+            content: attr(data-index);
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+            border-radius: 50%;
+            background-color: #e8e9e7;
+            line-height: 22px;
+            text-align: center;
+          }
+        }
+      }
+    }
     .aside-search {
+      overflow: hidden;
       width: 300px;
       background: white;
+      border-radius: 25px;
     }
     .search-main {
       position: relative;
