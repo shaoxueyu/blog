@@ -13,14 +13,24 @@ module.exports.getHotArticleInfo = async () => {
 	).limit(8)
 	return data
 }
-module.exports.getAllarticleInfo = async () => {
-	const data = await model[ARTICLE].find(
-		{},
-		{ __v: 0 },
-		{ sort: { pv: -1 } }
-	).limit(8)
-	/* 	data.sort((item, item1) => {
-		return item1.date.getTime() - item.date.getTime()
-	}) */
-	return data
+module.exports.getArticleInfo = async (page, pagesize, tag) => {
+	if (!tag) {
+		const data = await model[ARTICLE].find(
+			{},
+			{ __v: 0 },
+			{ sort: { pv: -1 } }
+		)
+			.skip((page - 1) * pagesize)
+			.limit(pagesize)
+		return data
+	} else {
+		const data = await model[ARTICLE].find(
+			{ tag },
+			{ __v: 0 },
+			{ sort: { pv: -1 } }
+		)
+			.skip((page - 1) * pagesize)
+			.limit(pagesize)
+		return data
+	}
 }

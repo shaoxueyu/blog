@@ -1,7 +1,7 @@
 const {
 	getHotArticleInfo,
 	getArticleTagsInfo,
-	getAllarticleInfo,
+	getArticleInfo,
 } = require('../../controller/acticle')
 const { SuccessModel, ErrorModel } = require('../../BaseModel/index')
 module.exports = {
@@ -23,10 +23,15 @@ module.exports = {
 			ctx.body = new ErrorModel(e, 'error')
 		}
 	},
-	//全部文章
-	'get /allArticleInfo': async (ctx) => {
+	//文章
+	'get /articleInfo': async (ctx) => {
 		try {
-			const data = await getAllarticleInfo()
+			const [page, pagesize, tag] = [
+				Number(ctx.request.query.page),
+				Number(ctx.request.query.pagesize),
+				ctx.request.query.tag,
+			]
+			const data = await getArticleInfo(page, pagesize, tag)
 			ctx.body = new SuccessModel(data, 'success')
 		} catch (e) {
 			ctx.body = new ErrorModel(e, 'error')
