@@ -6,13 +6,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --open --port 3000  --hot --config webpack.dev.js",
-    "prod": "webpack --config webpack.pro.js"
+    "prod": "webpack --config webpack.pro.js",
+    "node": "nodemon ./src/server/index",
+    "serve-dev": "concurrently \"npm run node\" \"npm run dev\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@koa/router": "^8.0.8",
+    "axios": "^0.19.2",
     "element-ui": "^2.13.1",
     "jquery": "^3.5.0",
     "jsonwebtoken": "^8.5.1",

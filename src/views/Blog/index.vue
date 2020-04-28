@@ -17,15 +17,15 @@
           <ul
             class="search-acticle"
             @mouseover="handleUlCover"
-            @mouseout="handleUlCoverOut"
           >
             <li
               class="search-acticle-li"
               v-for="item in articleList"
               :key="item.pathName"
+              @mouseleave="handleUlCoverOut"
             >
               <a :href="
-              item.path">{{item.pathName}}</a>
+              item.path? item.path:'#'">{{item.pathName? item.pathname:item}}</a>
 
             </li>
             <!-- 动画遮罩层 -->
@@ -46,47 +46,29 @@
 
 <script>
 import Nav from "@/components/Nav"
+import { getArticleTagsInfo, getHotArticleInfo } from "@/http/article"
 export default {
   data() {
     return {
       keywordSearch: "", //关键字搜索
-      articleList: [
-        {
-          path: "#",
-          pathName: "全部文章"
-        },
-        {
-          path: "#",
-          pathName: "技巧篇"
-        },
-        {
-          path: "#",
-          pathName: "前端框架篇"
-        },
-        {
-          path: "#",
-          pathName: "基础篇"
-        },
-        {
-          path: "#",
-          pathName: "其他"
-        },
-        {
-          path: "#",
-          pathName: "全部文章"
-        },
-
-      ],
+      articleList: [..."loading... ".repeat(6).split(" ").filter(item => item !== "")],
       liTopcover: 25
     }
   },
   methods: {
+    //接口统一处理
+    async handleApi() {
+      let { status, data } = await getArticleTagsInfo()
+      console.log(status, data);
+    },
     handleUlCover(e) {
       /* 利用事件委托 */
       if (e.target.tagName === "LI") {
         this.liTopcover = Number(e.target.offsetTop)
-      } else {
+      } else if (e.target.tagName === "A") {
         this.liTopcover = Number(e.target.parentNode.offsetTop)
+      } else {
+        this.liTopcover = 25
       }
     },
     handleUlCoverOut() {
@@ -94,6 +76,9 @@ export default {
     }
 
 
+  },
+  created() {
+    this.handleApi()
   },
   mounted() {
     document.title = "博客"
