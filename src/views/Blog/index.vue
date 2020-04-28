@@ -20,7 +20,7 @@
           >
             <li
               class="search-acticle-li"
-              v-for="item in articleList"
+              v-for="item in articleTagsList"
               :key="item.pathName"
               @mouseleave="handleUlCoverOut"
             >
@@ -36,7 +36,11 @@
           </ul>
 
         </div>
-        <div class="aside-hot">热门</div>
+        <div class="aside-hot">
+          <ul class="aside-hot-ul">
+            <li class="aside-hot-li" data-index=1 ></li>
+          </ul>
+        </div>
         <div class="aside-recommond">评论</div>
         <div class="aside-visitor">有谁看我</div>
       </el-aside>
@@ -51,7 +55,8 @@ export default {
   data() {
     return {
       keywordSearch: "", //关键字搜索
-      articleList: [..."loading... ".repeat(6).split(" ").filter(item => item !== "")],
+      articleTagsList: [..."loading... ".repeat(6).split(" ").filter(item => item !== "")],
+      hotArticleList: [[..."loading... ".repeat(8).split(" ").filter(item => item !== "")]],
       liTopcover: 25
     }
   },
@@ -59,7 +64,13 @@ export default {
     //接口统一处理
     async handleApi() {
       let { status, data } = await getArticleTagsInfo()
-      console.log(status, data);
+      if(status === 200){
+        this.articleList = data["data"].tags
+      }
+      let {status:status1,data:data1} = await getHotArticleInfo()
+      if(status1 === 200){
+
+      }
     },
     handleUlCover(e) {
       /* 利用事件委托 */

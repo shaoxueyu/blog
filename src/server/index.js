@@ -15,7 +15,7 @@ app.use(static(path.join(__dirname, './public')))
 app.use(bodyParser())
 
 app.use(async (ctx, next) => {
-	ctx.set('Access-Control-Allow-Origin', ctx.headers['host'])
+	ctx.set('Access-Control-Allow-Origin', ctx.headers['origin'])
 	//设置跨域
 	ctx.set('Access-Control-Allow-Credentials', 'true')
 	ctx.set('Access-Control-Allow-Methods', 'PUT,DELETE,OPTIONS')
