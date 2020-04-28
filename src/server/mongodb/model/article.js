@@ -24,7 +24,7 @@ module.exports = {
 		pv: {
 			type: Number,
 			default: 0,
-		}, // 浏览量
+	}, // 浏览量
 		comment: {
 			type: Schema.Types.ObjectId,
 			ref: 'comment',

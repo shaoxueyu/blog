@@ -3,10 +3,6 @@ module.exports = {
 		tags: {
 			type: Array,
 			required: true,
-		},
-		num: {
-			type: Number,
-			required: true,
-		},
+		}
 	},
 }

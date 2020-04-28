@@ -2,9 +2,11 @@
   <!-- 博客内容 -->
   <div id="blog-page">
     <el-container class="blog-container">
-      <el-container></el-container>
+      <el-container>
+        <router-view></router-view>
+      </el-container>
       <el-aside>
-        <div class="aside-search">
+        <div :class="['aside-search',{'aside-search-fixed':ifFixed}]">
           <!-- 搜索栏 -->
           <div class="search-main">
             <el-input
@@ -18,16 +20,18 @@
             class="search-acticle"
             @mouseover="handleUlCover"
           >
-            <li
-              class="search-acticle-li"
-              v-for="(item,index) in articleTagsList"
-              :key="index"
-              @mouseleave="handleUlCoverOut"
-            >
-              <a :href="
-              item.path? item.path:'#'">{{item.pathName? item.pathname:item}}</a>
+            <template v-for="(item) in articleTagsList">
+              <li
+                class="search-acticle-li"
+                :key="item.path"
+                @mouseleave="handleUlCoverOut($route.meta.id)"
+              >
+                <router-link :to="'/blog'+item.path">
+                  {{item.pathName}}
+                </router-link>
+              </li>
+            </template>
 
-            </li>
             <!-- 动画遮罩层 -->
             <li
               class="article-li-cover"
@@ -37,7 +41,7 @@
 
         </div>
         <div class="aside-hot">
-          <h3>热门文章</h3>
+          <h3>热门文章 <i>Popular articles</i></h3>
           <ul class="aside-hot-ul">
             <li
               v-for="(item,index) in hotArticleList"
@@ -48,8 +52,88 @@
                 {{item.title}} </a></li>
           </ul>
         </div>
-        <div class="aside-recommond">评论</div>
-        <div class="aside-visitor">有谁看我</div>
+        <div class="aside-visitor">
+          <h3>
+            最近访客
+            <i>
+              Recent Visitors
+            </i>
+          </h3>
+          <ul class="aside-visitor-ul clearfix">
+            <li class="aside-visitor-li">
+              <img
+                src="http://localhost:8000/images/default_surface.jpg"
+                alt=""
+              >
+            </li>
+            <li class="aside-visitor-li">
+              <img
+                src="http://localhost:8000/images/default_surface.jpg"
+                alt=""
+              >
+            </li>
+            <li class="aside-visitor-li">
+              <img
+                src="http://localhost:8000/images/default_surface.jpg"
+                alt=""
+              >
+            </li>
+            <li class="aside-visitor-li">
+              <img
+                src="http://localhost:8000/images/default_surface.jpg"
+                alt=""
+              >
+            </li>
+            <li class="aside-visitor-li">
+              <img
+                src="http://localhost:8000/images/default_surface.jpg"
+                alt=""
+              >
+            </li>
+            <li class="aside-visitor-li">
+              <img
+                src="http://localhost:8000/images/default_surface.jpg"
+                alt=""
+              >
+            </li>
+            <li class="aside-visitor-li">
+              <img
+                src="http://localhost:8000/images/default_surface.jpg"
+                alt=""
+              >
+            </li>
+            <li class="aside-visitor-li">
+              <img
+                src="http://localhost:8000/images/default_surface.jpg"
+                alt=""
+              >
+            </li>
+            <li class="aside-visitor-li">
+              <img
+                src="http://localhost:8000/images/default_surface.jpg"
+                alt=""
+              >
+            </li>
+            <li class="aside-visitor-li ">
+              <img
+                src="http://localhost:8000/images/default_surface.jpg"
+                alt=""
+              >
+            </li>
+            <li class="aside-visitor-li">
+              <img
+                src="http://localhost:8000/images/default_surface.jpg"
+                alt=""
+              >
+            </li>
+            <li class="aside-visitor-li">
+              <img
+                src="http://localhost:8000/images/default_surface.jpg"
+                alt=""
+              >
+            </li>
+          </ul>
+        </div>
       </el-aside>
     </el-container>
   </div>
@@ -64,7 +148,8 @@ export default {
       keywordSearch: "", //关键字搜索
       articleTagsList: [..."loading... ".repeat(6).split(" ").filter(item => item !== "")],
       hotArticleList: [..."loading... ".repeat(8).split(" ").filter(item => item !== "")],
-      liTopcover: 25
+      liTopcover: 25,
+      ifFixed: false
     }
   },
   methods: {
@@ -77,7 +162,6 @@ export default {
       let { status: status1, data: data1 } = await getHotArticleInfo()
       if (status1 === 200) {
         this.hotArticleList = data1.data
-        console.log(this.hotArticleList);
       }
     },
     handleUlCover(e) {
@@ -90,17 +174,32 @@ export default {
         this.liTopcover = 25
       }
     },
-    handleUlCoverOut() {
-      this.liTopcover = 25
+    handleUlCoverOut(id) {
+      this.liTopcover = 25 + (id - 1) * 40
+    },
+    handleScroll() {
+      this.ifFixed = document.documentElement.scrollTop >= 900;
     }
-
 
   },
   created() {
     this.handleApi()
   },
   mounted() {
-    document.title = "博客"
+    window.addEventListener("scroll", this.handleScroll)
+  },
+
+  destroyed() {
+    window.removeEventListener("scroll", this.handleScroll)
+  },
+  watch: {
+    "$route.meta.id": {
+      handler(value) {
+        this.liTopcover = 25 + (value - 1) * 40
+        console.log(this.liTopcover);
+      },
+      immediate: true
+    }
   },
   components: {
     Nav
@@ -114,10 +213,53 @@ export default {
   .blog-container {
     padding: 10px 0;
     width: 1280px;
+    height: 2500px;
     box-sizing: border-box;
     padding: 35px 45px;
     background-color: pink;
     margin: 0 auto;
+    .aside-visitor {
+      height: 250px;
+      overflow: hidden;
+      margin-top: 25px;
+      border-radius: 25px;
+      padding: 15px;
+      background-color: white;
+      .aside-visitor-ul {
+        margin-top: 7px;
+        padding: 4px;
+        text-align: center;
+        .aside-visitor-li {
+          position: relative;
+          display: inline-block;
+          &::after {
+            content: "像风一样";
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            color: white;
+            font-size: 12px;
+            line-height: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+          }
+          img {
+            width: 60px;
+            height: 60px;
+          }
+        }
+      }
+      h3 {
+        margin: 0 10px;
+        padding: 15px 0 4px 15px;
+        border-bottom: 1px solid #e8e9e7;
+        font-size: 20px;
+        i {
+          font-family: smallkerBoom;
+          font-size: 33px;
+        }
+      }
+    }
     .aside-hot {
       margin-top: 25px;
       padding: 10px 25px;
@@ -128,6 +270,10 @@ export default {
         line-height: 30px;
         font-size: 20px;
         border-bottom: 1px solid #e8e9e7;
+        i {
+          font-size: 33px;
+          font-family: smallkerBoom;
+        }
       }
       ul.aside-hot-ul {
         margin-top: 15px;
@@ -176,10 +322,33 @@ export default {
       }
     }
     .aside-search {
+      z-index: 99;
       overflow: hidden;
       width: 300px;
       background: white;
       border-radius: 25px;
+    }
+    .aside-search.aside-search-fixed {
+      position: fixed;
+      animation: searchMove 1s 1 ease-in-out;
+      animation-fill-mode: forwards;
+    }
+    @keyframes searchMove {
+      0% {
+        top: -100%;
+      }
+      40% {
+        top: 10%;
+      }
+      60% {
+        top: 6%;
+      }
+      80% {
+        top: 10%;
+      }
+      100% {
+        top: 10%;
+      }
     }
     .search-main {
       position: relative;
