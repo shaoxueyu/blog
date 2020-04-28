@@ -11,7 +11,7 @@ const routes = [
 		component: () => import('../views/About/index.vue'),
 	},
 	{
-		redirect: '/ blog/all',
+		redirect: '/blog/all',
 		path: '/blog',
 		name: 'blog',
 		component: () => import('../views/Blog/index.vue'),

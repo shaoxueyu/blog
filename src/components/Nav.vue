@@ -4,7 +4,7 @@
 
       <!-- log -->
       <div class="nav-left-logo left">Smallker · Blog</div>
-      <!-- 登录 -->
+      <!-- ?? -->
       <div class="nav-right-login right">
         <el-button
           type="primary"
@@ -15,7 +15,6 @@
           size="small"
         >注 &nbsp 册</el-button>
       </div>
-      <!-- 导航栏 -->
       <div
         class="small-nav"
         @click="MenuActive"
@@ -25,13 +24,13 @@
         <li
           v-for="item in navList"
           :key="item.path"
-          :class="['nav-li', 'left',{active:item.path === routes}]"
+          :class="['nav-li', 'left',{active:routes.indexOf(item.path) !== -1}]"
         >
           <router-link :to="item.path">{{item.pathName}}</router-link>
         </li>
       </ul>
     </div>
-    <!-- 响应式导航栏 -->
+    <!-- ?????? -->
     <nav
       :class="['nav-small',{active: navSmActive? true:false}]"
       ref="navSmallRef"
@@ -59,7 +58,7 @@ export default {
       navSmActive: false,
       navList: [
         {
-          path: "/",
+          path: "/home",
           pathName: "首页"
         },
         {
@@ -92,7 +91,7 @@ export default {
   },
   mounted() {
     this.$refs["navSmallRef"].addEventListener("transitionend", function () {
-      console.log("过度效果完成");
+      console.log("??????");
     })
   },
   computed: {
