@@ -21,14 +21,16 @@
           #"
             class="clearfix"
           >
-            <div class="left-content left">
+            <div class="left left-content">
+              <div class="dummy"></div>
               <img
-                src="http://localhost:8000/images/default_surface.jpg"
+                src="http://localhost:8000/images/content.jpg"
                 alt=""
                 class=""
               >
+
             </div>
-            <div class="right-content right">
+            <div class="right right-content ">
               <p>{{item.content}}</p>
             </div>
           </a>
@@ -36,18 +38,20 @@
 
         <div class="item-tip clearfix">
           <!-- 书签 -->
-          <i class="el-icon el-icon-s-claim left"></i>
-          <span class="left"> {{item.tag}} </span>
+          <div class="left">
+            <i class="el-icon el-icon-s-claim left"></i>
+            <span class="left"> {{item.tag}} </span>
+          </div>
+
           <div class="right">
             <!-- 浏览量 评论-->
             <span>
-              <i class="el-icon el-icon-view right"></i>{{item.pv}}
+              <i class="el-icon el-icon-view"></i>{{item.pv}}
             </span>
             <span>
-              <i class="el-icon el-icon-chat-dot-round right"></i>
+              <i class="el-icon el-icon-chat-dot-round"></i>
               1
             </span>
-
           </div>
         </div>
       </section>
@@ -64,9 +68,20 @@ export default {
     }
   },
   methods: {
-
+    handlerSroll() {
+      // 滚动高
+      const scrollTop = document.documentElement.scrollTop
+      // 可是高
+      const clientHeight = document.documentElement.clientHeight
+      //文档高
+      const offsetHeight = document.documentElement.offsetHeight
+      if (scrollTop + clientHeight > offsetHeight - 100){
+        console.log("滚动到最底部了");
+      }
+    }
   },
   mounted() {
+    window.addEventListener("scroll", this.handlerSroll)
   },
   watch: {
     "$route": {
@@ -147,39 +162,52 @@ export default {
       font-size: 16px;
       margin-top: 30px;
       color: #787977;
-      div {
-        i {
-          &:nth-child(2) {
-            text-align: right;
-            font-size: 15px;
-            padding-right: 35px;
-            color: green;
-          }
-        }
-      }
       i {
         font-size: 18px;
       }
-      span {
-        margin-left: 1px;
-        padding: 0 5px;
-        background-color: #f1f2f0;
-        &:hover {
-          background-color: #6bc30d;
-          color: white;
-          transition: 0.5s;
+      .left {
+        span {
+          margin-left: 1px;
+          padding: 0 5px;
+          background-color: #f1f2f0;
+          &:hover {
+            background-color: #6bc30d;
+            color: white;
+            transition: 0.5s;
+          }
         }
       }
     }
     .content {
       margin-top: 25px;
       .left-content {
+        position: relative;
+        overflow: hidden;
         width: 300px;
         height: 180px;
+        &:hover::after {
+          transition: left 0.7s ease-in-out;
+          left: 160%;
+        }
+        &::after {
+          content: "";
+          height: 100%;
+          width: 100px;
+          left: -90%;
+          position: absolute;
+          transform: skewX(-25deg) translateZ(0);
+          background-image: linear-gradient(
+            90deg,
+            hsla(0, 0%, 100%, 0),
+            hsla(0, 0%, 100%, 0.3) 50%,
+            hsla(0, 0%, 100%, 0)
+          );
+          transform: skewX(-25deg) translateZ(0);
+          z-index: 2;
+        }
         img {
           border-radius: 3px;
           width: 100%;
-          height: 100%;
         }
       }
       .right-content {
@@ -197,6 +225,29 @@ export default {
         }
       }
     }
+  }
+}
+@media screen and (max-width: 875px) {
+  .el-aside {
+    display: none;
+  }
+
+  .article-inner .article-item .content .left-content {
+    width: 100%;
+  }
+  .article-inner .article-item .content .right-content {
+    float: none;
+    width: 100%;
+    transition: 0.5s;
+    p {
+      margin-top: 25px;
+    }
+  }
+}
+@media screen and (max-width: 675px) {
+  .article-inner .article-item .time {
+    transition: 0.5s;
+    opacity: 0 !important;
   }
 }
 </style>

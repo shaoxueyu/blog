@@ -210,10 +210,10 @@ export default {
 <style lang="less" scoped>
 #blog-page {
   padding-top: 60px;
+
   .blog-container {
     padding: 10px 0;
     width: 1280px;
-    height: 2500px;
     box-sizing: border-box;
     padding: 35px 45px;
     background-color: pink;
@@ -410,6 +410,21 @@ export default {
   .blog-container {
     transition: 0.5s;
     width: 90% !important;
+  }
+}
+@media screen and (max-width: 1260px) {
+  .el-aside {
+    display: none;
+  }
+  .el-container {
+    .article-inner {
+      margin: 0 auto;
+    }
+  }
+}
+@media screen and (max-width: 580px) {
+  #blog-page .blog-container {
+    padding: 0;
   }
 }
 </style>
