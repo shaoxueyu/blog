@@ -1,4 +1,4 @@
-const model = require('../mongodb/index.js')
+/* const model = require('../mongodb/index.js')
 
 const mock = require('mockjs')
 let data = mock.mock({
@@ -20,4 +20,4 @@ let data = mock.mock({
 	],
 })
 
-model['article'].create(data.data)
+model['article'].create(data.data) */

@@ -24,14 +24,15 @@ module.exports = {
 				date.setTime(date.getTime() + 2 * 60 * 1000)
 				ctx.set(
 					'Set-Cookie',
-					`${sessionKey}=${sid};expires=${date.toGMTString()}`
+					`${sessionKey}=${sid}; Max-Age=86400; HTTPOnly`
 				)
+				
 				session[sid] = {}
 				session[sid].vcode = vcodeMsg.text
 				session[sid].accessTimes = 1
 				setTimeout(() => {
 					delete session[sid]
-					console.log(`删除成功`,sid,session);
+					console.log(`删除成功`, sid, session)
 				}, 1000 * 30)
 			}
 			ctx.body = new SuccessModel(vcodeMsg, '返回验证码成功')

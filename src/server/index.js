@@ -14,11 +14,12 @@ const app = routesloader.getApp() //返回koa实例
 app.use(static(path.join(__dirname, './public')))
 app.use(bodyParser())
 
-app.use(async (ctx, next) => {
-	ctx.set('Access-Control-Allow-Origin', ctx.headers['origin'])
+app.use(async (ctx, next) => {//ctx.headers['origin']
+	ctx.set('Access-Control-Allow-Origin', "http://localhost:3000")
 //设置跨域
-	ctx.set('Access-Control-Allow-Credentials', 'true')
-	ctx.set('Access-Control-Allow-Methods', 'PUT,DELETE,OPTIONS')
+	ctx.set("Access-Control-Allow-Credentials", true)
+	ctx.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, If-Modified-Since");
+	ctx.set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 	await next()
 })
 

@@ -54,6 +54,7 @@
           autocomplete="off"
         ></el-input>
         <div
+          @click="regetVcode"
           class="svg-inner"
           v-html="vcode.data"
         ></div>
@@ -63,6 +64,7 @@
           type="danger"
           round
           class="left"
+          @click="resetForm"
         >
           <i class="el-icon el-icon-delete"></i>
         </el-button>
@@ -80,6 +82,7 @@
 
 <script>
 import { getVcode } from "@/http/vcode"
+import throttle from "@/utils/throttle"
 export default {
   data() {
     return {
@@ -131,7 +134,15 @@ export default {
           }
         ],
         vcode: {
-          required: true, message: "请填写验证码", trigger: "blur"
+          required: true,
+          trigger: "blur",
+          validator: (rule, value, callback) => {
+            if (value === this.vcode.text) {
+              callback()
+            } else {
+              callback(new Error("验证码错误"))
+            }
+          }
         }
       }
     }
@@ -140,6 +151,7 @@ export default {
   },
   mounted() {
     this.getVcode()
+    this.throttleRegetVcode()
   },
   methods: {
     async getVcode() {
@@ -147,6 +159,19 @@ export default {
 
       this.vcode.data = data.data.data
       this.vcode.text = data.data.text
+    },
+    resetForm() {
+      this.$refs["formRef"].resetFields()
+    },
+    throttleRegetVcode() {
+      this.regetVcode = throttle(this.regetVcode, 2000)
+    },
+    async regetVcode() {
+      let { status, data } = await getVcode()
+      if (status >= 200 && status < 300) {
+        this.vcode.data = data.data.data
+        this.vcode.text = data.data.text
+      }
     }
   }
 }
@@ -170,6 +195,7 @@ export default {
     bottom: 0;
     margin: auto;
     left: 35%;
+    cursor: pointer;
   }
 }
 .btn-wrap {
