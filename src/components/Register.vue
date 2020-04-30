@@ -42,6 +42,22 @@
           show-password
         ></el-input>
       </el-form-item>
+      <el-form-item
+        type="text"
+        autocomplete="off"
+        class="box vcode-box"
+        label="验证码："
+        prop="vcode"
+      >
+        <el-input
+          v-model="formData.vcode"
+          autocomplete="off"
+        ></el-input>
+        <div
+          class="svg-inner"
+          v-html="vcode.data"
+        ></div>
+      </el-form-item>
       <el-form-item class="btn-wrap">
         <el-button
           type="danger"
@@ -63,16 +79,19 @@
 </template>
 
 <script>
+import { getVcode } from "@/http/vcode"
 export default {
   data() {
     return {
-      validateSpace: (rule, value, callback) => {
-        console.log(rule, value, callback);
+      vcode: {
+        text: "", // 答案
+        data: "" // svg
       },
       formData: {
         username: "",
         pwd: "",
-        checkPwd: ""
+        checkPwd: "",
+        vcode: ""
       },
       formRules: {
         username: [
@@ -81,14 +100,23 @@ export default {
           { type: "string", pattern: /^[\w\u4e00-\u9f5a5\uac00-\ud7ff\u0800-\u4e00\-\_]{3,15}$/, message: "3~15位数字、字母、下划线，中日韩", trigger: "blur" },
           { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
         ],
-        pwd:{ [
-          { required: true, message: '请填写密码', trigger: 'blur' },
-          {
-            type: "string", pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/,
-            message: "密码至少包含 数字和英文，长度6-20",
-            trigger: "blur"
+        pwd: {
+          required: true,
+          type: "string",
+          trigger: ["blur", "change"],
+          validator: (rule, value, callback) => {
+            console.log(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(value));
+            if (/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(value) && !/ /.test(value)) {
+              callback()
+            } else {
+              callback(new Error("密码至少包含 数字和英文，长度6-20, 且不能包含空格"))
+            }
+            //还需要触发确认密码验证 
+            //手动触发
+            this.formData.checkPwd && this.$refs.formRef.validateField("checkPwd")
           }
-        ]},
+
+        },
         checkPwd: [
           {
             validator: (rule, value, callback) => {
@@ -98,24 +126,57 @@ export default {
                 callback(new Error("两次密码不一致"))
               }
             },
-            trigger: "blur" ,
+            trigger: "blur",
             required: true
           }
-        ]
+        ],
+        vcode: {
+          required: true, message: "请填写验证码", trigger: "blur"
+        }
       }
     }
   },
   watch: {
+  },
+  mounted() {
+    this.getVcode()
+  },
+  methods: {
+    async getVcode() {
+      let { status, data } = await getVcode()
+
+      this.vcode.data = data.data.data
+      this.vcode.text = data.data.text
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
+/deep/.vcode-box {
+  .el-form-item__label {
+    display: block;
+    text-align: left;
+    float: none;
+  }
+  .el-input {
+    width: 30%;
+  }
+  .svg-inner {
+    position: absolute;
+    width: 30%;
+    height: 100%;
+    top: -19px;
+    bottom: 0;
+    margin: auto;
+    left: 35%;
+  }
+}
 .btn-wrap {
   padding: 0 45px;
 }
-.box {
-  /deep/input {
+/deep/.box {
+  input {
     &:focus {
       border: 1px solid skyblue !important;
     }
