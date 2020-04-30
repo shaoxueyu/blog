@@ -143,20 +143,27 @@ table {
 	width: 100%;
 	text-align: center;
 }
-.clearfix:after{
-	content:".";
-	display:block;
-	height:0;
-	clear:both;
-	visibility:hidden;
+.clearfix:after {
+	content: '.';
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
 }
-.left{
+.left {
 	float: left;
 }
-.right{
+.right {
 	float: right;
 }
-a{
+a {
 	text-decoration: none !important;
 	color: black !important;
+}
+.message-box-register  .el-message-box__title span::after {
+	display: inline-block;
+	padding-left: 15px;
+	content: 'Register';
+	font-family: smallkerBoom;
+	font-size: 35px;
 }

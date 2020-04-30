@@ -2,7 +2,7 @@
   <!-- 博客文章内容 -->
   <div class="article-inner">
     <article
-      class="article-item"
+      class="article-item animated bounceIn"
       v-for="item in articlelist"
       :key="item._id"
     >
@@ -61,31 +61,45 @@
 
 <script>
 import { getArticleInfo } from "@/http/article"
+import throttle from "@/utils/throttle"
 export default {
   data() {
     return {
-      articlelist: []
+      articlelist: [],
+      page: 1,
+      pagesize: 5
     }
   },
   methods: {
-    handlerSroll() {
+    async handlerSroll(e) {
       // 滚动高
       const scrollTop = document.documentElement.scrollTop
       // 可是高
       const clientHeight = document.documentElement.clientHeight
       //文档高
       const offsetHeight = document.documentElement.offsetHeight
-      if (scrollTop + clientHeight > offsetHeight - 100){
-        console.log("滚动到最底部了");
+      if (scrollTop + clientHeight > offsetHeight - 100) {
+        let { status, data } = await getArticleInfo(this.page + 1, this.pagesize, this.$route.meta.tag)
+        this.articlelist = [...this.articlelist, ...data.data]
+        this.page++ //只有当请求到了数据，并且显示在页面上才会加+1
       }
     }
   },
   mounted() {
+    this.handlerSroll = throttle(this.handlerSroll, 2000)
     window.addEventListener("scroll", this.handlerSroll)
+    //给页面绑定滑轮滚动事件 
+    if (document.addEventListener) {//firefox 
+      document.addEventListener('DOMMouseScroll', this.handlerSroll);
+    }
+    //滚动滑轮触发scrollFunc方法 //ie 谷歌 
+    window.onmousewheel = document.onmousewheel = this.handlerSroll;
   },
   watch: {
     "$route": {
       async handler($route) {
+        this.page = 1
+        window.scrollTo(0,0)
         if ($route.meta.tag) {
           let { data, status } = await getArticleInfo(1, 5, $route.meta.tag)
           this.articlelist = data.data
@@ -95,7 +109,6 @@ export default {
             this.articlelist = data.data
           }
         }
-        console.log(this.articlelist);
       },
       immediate: true
     }

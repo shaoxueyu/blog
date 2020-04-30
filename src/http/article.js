@@ -13,13 +13,22 @@ export const getHotArticleInfo = async () => {
 	return { data, status }
 }
 //全部文章
-export const getArticleInfo = async (page = 1, pagesize = 5, tag) => {
-	let { data, status } = await axios.get('/article/articleInfo', {
-		params: {
-			page,
-			pagesize,
-			tag,
-		},
-	})
-	return { data, status }
+export const getArticleInfo = async (
+	page = 1,
+	pagesize = 5,
+	tag,
+	valve = true
+) => {
+	if (valve) {
+		valve = false
+		let { data, status } = await axios.get('/article/articleInfo', {
+			params: {
+				page,
+				pagesize,
+				tag,
+			},
+		})
+		valve = true
+		return { data, status }
+	} else return 
 }

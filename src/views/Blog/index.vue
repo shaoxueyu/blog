@@ -138,7 +138,6 @@
     </el-container>
   </div>
 </template>
-
 <script>
 import Nav from "@/components/Nav"
 import { getArticleTagsInfo, getHotArticleInfo } from "@/http/article"
@@ -196,13 +195,12 @@ export default {
     "$route.meta.id": {
       handler(value) {
         this.liTopcover = 25 + (value - 1) * 40
-        console.log(this.liTopcover);
       },
       immediate: true
     }
   },
   components: {
-    Nav
+    Nav,
   }
 }
 </script>
@@ -216,7 +214,6 @@ export default {
     width: 1280px;
     box-sizing: border-box;
     padding: 35px 45px;
-    background-color: pink;
     margin: 0 auto;
     .aside-visitor {
       height: 250px;

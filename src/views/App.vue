@@ -4,17 +4,40 @@
     <!-- 导航栏 -->
     <Nav></Nav>
     <router-view></router-view>
+    <!-- 回到顶部 -->
+    <Upup v-if="isUpup" />
   </div>
 </template>
 
 <script>
 import Nav from "@/components/Nav"
+import Upup from "@/components/Upup"
 export default {
+  data() {
+    return {
+      isUpup: false
+    }
+  },
   mounted() {
+    setTimeout(() => {
+      window.scroll(0, 0)
+    })
+
     document.title = "个人博客"
+    document.addEventListener("scroll", () => {
+
+      let scrollTop = document.documentElement.scrollTop
+      console.log(scrollTop);
+      if (scrollTop > 400) {
+        this.isUpup = true
+      } else {
+        this.isUpup = false
+      }
+    })
   },
   components: {
-    Nav
+    Nav,
+    Upup
   }
 }
 </script>

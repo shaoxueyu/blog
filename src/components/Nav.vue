@@ -13,6 +13,7 @@
         <el-button
           type="success"
           size="small"
+          @click="register"
         >注 &nbsp 册</el-button>
       </div>
       <div
@@ -51,10 +52,13 @@
 </template>
 
 <script>
+import throttle from "@/utils/throttle"
+import Register from "@/components/Register"
 export default {
   name: "Nav",
   data() {
     return {
+      alertKey: 0, //弹窗key值
       navSmActive: false,
       navList: [
         {
@@ -85,14 +89,25 @@ export default {
     }
   },
   methods: {
+    register() {
+      const h = this.$createElement;
+      this.$msgbox({
+        title: `注册`,
+        message: h(Register, { key: this.alertKey++ }),
+        showCancelButton: false,
+        showConfirmButton: false,
+        closeOnClickModal: false,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass:"message-box-register",
+        alertKey: 0,
+      }).then(null).catch(() => {})
+    },
     MenuActive() {
       this.navSmActive = !this.navSmActive
     }
   },
   mounted() {
-    this.$refs["navSmallRef"].addEventListener("transitionend", function () {
-      console.log("??????");
-    })
   },
   computed: {
     routes() {
