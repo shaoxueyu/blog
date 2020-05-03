@@ -1,6 +1,7 @@
 <template>
   <!-- 博客内容 -->
   <div id="blog-page">
+    <div id="blog-cover"></div>
     <el-container class="blog-container">
       <el-container>
         <router-view></router-view>
@@ -207,8 +208,21 @@ export default {
 
 <style lang="less" scoped>
 #blog-page {
+  position: relative;
   padding-top: 60px;
-
+  #blog-cover {
+    background-image: url(../../assets/images/bg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    z-index: -98;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    filter: blur(5px);
+  }
   .blog-container {
     padding: 10px 0;
     width: 1280px;

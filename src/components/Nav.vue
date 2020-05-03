@@ -1,5 +1,8 @@
 <template>
-  <div id="nav-page">
+  <div
+    id="nav-page"
+    :style="{backgroundColor:navColor}"
+  >
     <div class="nav-container clearfix">
 
       <!-- log -->
@@ -88,6 +91,11 @@ export default {
       ]
     }
   },
+  props: {
+    navColor: {
+      type: String,
+    }
+  },
   methods: {
     register() {
       const h = this.$createElement;
@@ -99,9 +107,9 @@ export default {
         closeOnClickModal: false,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        customClass:"message-box-register",
+        customClass: "message-box-register",
         alertKey: 0,
-      }).then(null).catch(() => {})
+      }).then(null).catch(() => { })
     },
     MenuActive() {
       this.navSmActive = !this.navSmActive
@@ -144,6 +152,8 @@ export default {
   background-color: white;
   padding: 0 50px;
   border-bottom: 1px solid #e8e9e7;
+  top: 0;
+  left: 0;
   .nav-container {
     position: relative;
     width: 1280px;
