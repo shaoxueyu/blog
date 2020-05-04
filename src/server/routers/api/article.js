@@ -17,7 +17,9 @@ module.exports = {
 	},
 	'get /hotArticleInfo': async (ctx) => {
 		try {
-			const data = await getHotArticleInfo()
+			let pagesize = ctx.request.query.pagesize || 8
+			pagesize = Number(pagesize)
+			const data = await getHotArticleInfo(pagesize)
 			ctx.body = new SuccessModel(data, 'success')
 		} catch (e) {
 			ctx.body = new ErrorModel(e, 'error')

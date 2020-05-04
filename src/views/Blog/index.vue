@@ -291,6 +291,10 @@ export default {
         .aside-hot-li {
           position: relative;
           line-height: 32px;
+          &:hover a {
+            color: #67c23a !important;
+            transform: translateX(20px) rotateX(360deg);
+          }
           &:nth-child(1)::before {
             background-color: #e24d46;
             color: #e8e9e7;
@@ -310,9 +314,7 @@ export default {
             color: #787977 !important;
             font-size: 14px;
             cursor: pointer;
-            &:hover {
-              color: #67c23a !important;
-            }
+            transition: transform 0.5s;
           }
 
           &::before {

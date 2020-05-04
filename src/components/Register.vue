@@ -73,6 +73,7 @@
           round
           class="right"
           style="margin-right:25px"
+          @click="submitForm(formRules)"
         >
           <i class="el-icon el-icon-check"></i></el-button>
       </el-form-item>
@@ -108,7 +109,6 @@ export default {
           type: "string",
           trigger: ["blur", "change"],
           validator: (rule, value, callback) => {
-            console.log(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(value));
             if (/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(value) && !/ /.test(value)) {
               callback()
             } else {
@@ -152,11 +152,17 @@ export default {
   mounted() {
     this.getVcode()
     this.throttleRegetVcode()
+
   },
   methods: {
+    //提交表单
+    submitForm(formRules) {
+      this.$refs["formRef"].validate((vaild) => {
+        console.log(vaild);
+      })
+    },
     async getVcode() {
       let { status, data } = await getVcode()
-
       this.vcode.data = data.data.data
       this.vcode.text = data.data.text
     },

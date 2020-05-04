@@ -8,8 +8,12 @@ export const getArticleTagsInfo = async () => {
 	return { data, status }
 }
 //博客热门文章
-export const getHotArticleInfo = async () => {
-	let { data, status } = await axios.get('/article/hotArticleInfo')
+export const getHotArticleInfo = async (pagesize = 8) => {
+	let { data, status } = await axios.get('/article/hotArticleInfo', {
+		params: {
+			pagesize,
+		},
+	})
 	return { data, status }
 }
 //全部文章
@@ -30,5 +34,5 @@ export const getArticleInfo = async (
 		})
 		valve = true
 		return { data, status }
-	} else return 
+	} else return
 }

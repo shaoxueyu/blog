@@ -5,12 +5,13 @@ module.exports.getArticleTagsInfo = async () => {
 	const data = await model[ARTICLETAGSINFO].findOne({}, { __v: 0, _id: 0 })
 	return data
 }
-module.exports.getHotArticleInfo = async () => {
+module.exports.getHotArticleInfo = async (pagesize) => {
+	console.log(pagesize);
 	const data = await model[ARTICLE].find(
 		{},
 		{ __v: 0, _id: 0 },
 		{ sort: { pv: -1 } }
-	).limit(8)
+	).limit(pagesize)
 	return data
 }
 module.exports.getArticleInfo = async (page, pagesize, tag) => {
