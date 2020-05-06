@@ -202,6 +202,9 @@ export default {
   },
   components: {
     Nav,
+  },
+  destroyed() {
+    window.scrollTo(0, 0)
   }
 }
 </script>

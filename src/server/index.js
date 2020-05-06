@@ -11,9 +11,8 @@ const conf = {
 }
 const routesloader = new RoutesLoader()
 const app = routesloader.getApp() //返回koa实例
-app.use(async (ctx, next) => {
-	//ctx.headers['origin']
-	ctx.set('Access-Control-Allow-Origin', 'http://localhost:3000')
+app.use(async (ctx, next) => {	
+	ctx.set('Access-Control-Allow-Origin', ctx.headers['origin'])
 	//设置跨域
 	ctx.set('Access-Control-Allow-Credentials', true)
 	ctx.set(
