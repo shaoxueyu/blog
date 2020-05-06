@@ -55,8 +55,8 @@ const routes = [
 		],
 	},
 	{
-		path: '/daily',
-		name: 'daily',
+		path: '/diary',
+		name: 'diary',
 		component: () => import('../views/Diary/index.vue'),
 	},
 	{

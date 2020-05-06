@@ -4,16 +4,13 @@ const path = require('path')
 const jwt = require('jsonwebtoken')
 const jwtAuth = require('koa-jwt')
 const static = require('koa-static')
-const bodyParser = require('koa-bodyparser')
+const bodyParser = require('koa-bodyparser') //解析json
 const conf = {
 	port: 8000,
 	path: path.join(__dirname, './routers'),
 }
 const routesloader = new RoutesLoader()
 const app = routesloader.getApp() //返回koa实例
-app.use(static(path.join(__dirname, './public')))
-app.use(bodyParser())
-
 app.use(async (ctx, next) => {
 	//ctx.headers['origin']
 	ctx.set('Access-Control-Allow-Origin', 'http://localhost:3000')
@@ -23,9 +20,11 @@ app.use(async (ctx, next) => {
 		'Access-Control-Allow-Headers',
 		'Origin, X-Requested-With, Content-Type, Accept, If-Modified-Since'
 	)
-	ctx.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, DELETE')
+	ctx.set('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
 	await next()
 })
+app.use(bodyParser())
+app.use(static(path.join(__dirname, './public')))
 
 app.use(async (ctx, next) => {
 	console.log(
@@ -35,6 +34,7 @@ app.use(async (ctx, next) => {
 		ctx.request.url,
 		'query',
 		ctx.request.query,
+		'body',
 		ctx.request.body
 	)
 	await next()

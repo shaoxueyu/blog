@@ -19,6 +19,18 @@
         </el-input>
       </el-form-item>
       <el-form-item
+        label="邮箱："
+        prop="email"
+      >
+        <el-input
+          type="text"
+          v-model="formData.email"
+          autocomplete="off"
+          class="box"
+        >
+        </el-input>
+      </el-form-item>
+      <el-form-item
         label="密码："
         prop="pwd"
       >
@@ -83,6 +95,7 @@
 
 <script>
 import { getVcode } from "@/http/vcode"
+import { registerUser } from "@/http/user"
 import throttle from "@/utils/throttle"
 export default {
   data() {
@@ -93,6 +106,7 @@ export default {
       },
       formData: {
         username: "",
+        email: "",
         pwd: "",
         checkPwd: "",
         vcode: ""
@@ -103,6 +117,10 @@ export default {
           //三到十五位数字、字母、下划线，中日韩/
           { type: "string", pattern: /^[\w\u4e00-\u9f5a5\uac00-\ud7ff\u0800-\u4e00\-\_]{3,15}$/, message: "3~15位数字、字母、下划线，中日韩", trigger: "blur" },
           { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: "请输入邮箱", trigger: "blur" },
+          { type: "string", pattern: /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/, message: "请输入正确的邮箱格式", trigger: "blur" }
         ],
         pwd: {
           required: true,
@@ -157,8 +175,18 @@ export default {
   methods: {
     //提交表单
     submitForm(formRules) {
-      this.$refs["formRef"].validate((vaild) => {
-        console.log(vaild);
+      this.$refs["formRef"].validate(async (vaild) => {
+        if (!vaild) return
+
+        let body = {}
+        body.username = this.formData.username
+        body.pwd = this.formData.pwd
+        body.vcode = this.formData.vcode
+        body.email = this.formData.email
+        let { status, data } = await registerUser(body)
+        if(status >=200 && status < 300){
+          
+        }
       })
     },
     async getVcode() {
