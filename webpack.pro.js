@@ -4,10 +4,10 @@ const path = require('path')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpackBaseConfig = require('./webpack.base')
-const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 //压缩单独打包出来的css
-const OptimizeCssAssetsWebpackPlugin = require("optimize-css-assets-webpack-plugin")
-  
+const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+
 module.exports = smart(webpackBaseConfig, {
 	entry: {
 		app: path.join(__dirname, './src/main.js'),
@@ -21,16 +21,20 @@ module.exports = smart(webpackBaseConfig, {
 		rules: [
 			{
 				test: /\.less$/,
-				use: ExtractTextWebpackPlugin.extract({
-					fallback: 'style-loader',
-					use: ['css-loader', 'less-loader'],
-				}),
+				use: [
+					'style-loader',
+					MiniCssExtractPlugin.loader,
+					'css-loader',
+					'less-loader',
+				],
 			},
 		],
 	},
 	plugins: [
+		new MiniCssExtractPlugin({
+			filename: './css/[name]-[hash:7].css',
+		}),
 		new OptimizeCssAssetsWebpackPlugin(),
-		new ExtractTextWebpackPlugin('css/style.css'),
 		new CleanWebpackPlugin(),
 		new HtmlWebpackPlugin({
 			template: path.join(__dirname, './src/index.html'),

@@ -4,7 +4,6 @@
     :style="{backgroundColor:navColor}"
   >
     <div class="nav-container clearfix">
-
       <!-- log -->
       <div class="nav-left-logo left">Smallker · Blog</div>
       <!-- ?? -->
@@ -34,7 +33,6 @@
         </li>
       </ul>
     </div>
-    <!-- ?????? -->
     <nav
       :class="['nav-small',{active: navSmActive? true:false}]"
       ref="navSmallRef"
