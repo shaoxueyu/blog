@@ -50,9 +50,12 @@ export default {
 #link-page {
   padding-top: 60px;
   animation: appear 0.7s;
+  .card-all{
+    padding: 150px 10px;
+  }
   .link-content {
     width: 1280px;
-    margin: 0 auto;
+    margin: 50px auto;
     .link-title {
       overflow: hidden;
       text-align: center;

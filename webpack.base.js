@@ -21,20 +21,7 @@ module.exports = {
 				use: [
 					'style-loader',
 					'css-loader',
-					{
-						loader: 'postcss-loader',
-						options: {
-							ident: 'postcss',
-							plugins: [
-								require('autoprefixer')({
-									overrideBrowserslist: [
-										'>1%',
-										'last 2 versions',
-									],
-								}),
-							],
-						},
-					},
+					'postcss-loader',
 					'less-loader',
 				],
 			},
@@ -54,7 +41,7 @@ module.exports = {
 			},
 			{
 				test: /\.ttf|woff2?$/,
-				use:["url-loader"]
+				use: ['url-loader'],
 			},
 			{
 				test: /\.jsx?$/,

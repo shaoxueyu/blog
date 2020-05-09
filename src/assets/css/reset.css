@@ -160,10 +160,17 @@ a {
 	text-decoration: none !important;
 	color: black !important;
 }
-.message-box-register  .el-message-box__title span::after {
+.message-box-register .el-message-box__title span::after {
 	display: inline-block;
 	padding-left: 15px;
 	content: 'Register';
+	font-family: smallkerBoom;
+	font-size: 35px;
+}
+.message-box-login .el-message-box__title span::after {
+	display: inline-block;
+	padding-left: 15px;
+	content: 'Login';
 	font-family: smallkerBoom;
 	font-size: 35px;
 }

@@ -170,6 +170,7 @@ export default {
   mounted() {
     this.getVcode()
     this.throttleRegetVcode()
+    this.submitForm = throttle(this.submitForm, 3000)
 
   },
   methods: {
@@ -177,15 +178,21 @@ export default {
     submitForm(formRules) {
       this.$refs["formRef"].validate(async (vaild) => {
         if (!vaild) return
-
         let body = {}
         body.username = this.formData.username
         body.pwd = this.formData.pwd
         body.vcode = this.formData.vcode
         body.email = this.formData.email
         let { status, data } = await registerUser(body)
-        if(status >=200 && status < 300){
-          
+        if (status >= 200 && status < 300) {
+          if (status === 201 || status === 200) {
+            this.$message({
+              type: "success",
+              message: data.message
+            })
+          } else {
+            this.closeRegister()
+          }
         }
       })
     },

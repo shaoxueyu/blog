@@ -368,7 +368,7 @@ export default {
 
 <style lang="less" scoped>
 .link-main {
-  position: relative;
+  position: absolute;
   height: 300px;
   .cloud-content {
     overflow: hidden;

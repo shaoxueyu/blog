@@ -9,10 +9,12 @@ import {
 	Timeline,
 	TimelineItem,
 	Card,
+	Message
 } from 'element-ui'
 import Vue from 'vue'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.prototype.$msgbox = MessageBox
+Vue.prototype.$message = Message
 export default {
 	Button,
 	Aside,

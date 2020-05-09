@@ -11,6 +11,7 @@
         <el-button
           type="primary"
           size="small"
+          @click="login"
         >登 &nbsp 录</el-button>
         <el-button
           type="success"
@@ -55,6 +56,7 @@
 <script>
 import throttle from "@/utils/throttle"
 import Register from "@/components/Register"
+import Login from "@/components/Login"
 export default {
   name: "Nav",
   data() {
@@ -95,8 +97,12 @@ export default {
     }
   },
   methods: {
+    closeRegister() {
+      this.$msgbox.close()
+    },
     register() {
       const h = this.$createElement;
+      Register.methods.closeRegister = this.closeRegister //手动注入Vue到实例
       this.$msgbox({
         title: `注册`,
         message: h(Register, { key: this.alertKey++ }),
@@ -106,8 +112,22 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         customClass: "message-box-register",
-        alertKey: 0,
       }).then(null).catch(() => { })
+
+    },
+    login() {
+      const h = this.$createElement;
+      this.$msgbox({
+        title: `登录`,
+        message: h(Login, { key: this.alertKey++ }),
+        showCancelButton: false,
+        showConfirmButton: false,
+        closeOnClickModal: false,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass: "message-box-login",
+      }).then(null).catch(() => { })
+
     },
     MenuActive() {
       this.navSmActive = !this.navSmActive

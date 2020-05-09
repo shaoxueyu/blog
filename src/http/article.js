@@ -1,6 +1,4 @@
-import axios from 'axios'
-
-axios.defaults.baseURL = 'http://localhost:8000/api'
+import axios from "axios"
 
 //博客搜索栏文章
 export const getArticleTagsInfo = async () => {

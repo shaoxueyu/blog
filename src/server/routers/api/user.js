@@ -1,6 +1,10 @@
 const { session } = require('../../session/index')
 const { SuccessModel, ErrorModel } = require('../../BaseModel/index')
-const { checkUserIfRegister, createUser } = require('../../controller/user')
+const {
+	checkUserIfRegister,
+	createUser,
+	login,
+} = require('../../controller/user')
 module.exports = {
 	//跨域
 	'options /register': async (ctx) => {
@@ -22,11 +26,22 @@ module.exports = {
 		if (email) {
 			let data = await checkUserIfRegister(email)
 			if (data['data']) {
+				ctx.status = 201
 				ctx.body = new ErrorModel('用户已存在')
 				return
 			}
 		}
 		let data = await createUser({ username, pwd, vcode, email })
 		ctx.body = new SuccessModel(data, '注册成功')
+	},
+	'post /login': async (ctx) => {
+		let { username, pwd } = ctx.request.body
+		let data = await login({ username, pwd })
+		if (!data) {
+			ctx.status = 201
+			ctx.body = new ErrorModel(data, '用户不存在')
+		} else {
+			ctx.body = new SuccessModel(data.data, data.message)
+		}
 	},
 }

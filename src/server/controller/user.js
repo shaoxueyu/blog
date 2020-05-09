@@ -7,7 +7,7 @@ module.exports.checkUserIfRegister = async (email) => {
 	const data = await model[USER].findOne({ email })
 	return { data }
 }
-//创建用户
+//注册
 module.exports.createUser = async ({ username, pwd, email }) => {
 	const currentTime = getCurrentTime(2) // 获取时间
 	const data = await model[USER].create({
@@ -16,12 +16,24 @@ module.exports.createUser = async ({ username, pwd, email }) => {
 		email,
 		regDate: currentTime,
 	})
-	console.log(`${currentTime} 这个时刻创建了一个用户`, `数据库返回${data}`)
+	console.log(`${currentTime}创建了一个用户`, `数据库返回${data}`)
 	return {
 		username: data.username,
 		regDate: data.regDate,
 		admin: data.admin,
 		email: data.email,
 		photo: data.photo,
+	}
+}
+//登录
+module.exports.login = async ({ username, pwd }) => {
+	const data = await model[USER].findOne({ username }, { __v: 0, _id: 0 })
+	if (!data) {
+		return data
+	}
+	if (pwd !== data.pwd) {
+		return { data: null, message: '密码错误' }
+	} else {
+		return { data, message: '登录成功' }
 	}
 }

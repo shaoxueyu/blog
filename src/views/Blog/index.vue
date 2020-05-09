@@ -171,7 +171,7 @@ export default {
       } else if (e.target.tagName === "A") {
         this.liTopcover = Number(e.target.parentNode.offsetTop)
       } else {
-        this.liTopcover = 25
+        this.liTopcover = 25 + (this.$route.meta.id - 1) * 40
       }
     },
     handleUlCoverOut(id) {
