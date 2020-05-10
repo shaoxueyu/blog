@@ -100,9 +100,14 @@ export default {
     closeRegister() {
       this.$msgbox.close()
     },
+    closeLogin() {
+      this.$msgbox.close()
+    },
     register() {
       const h = this.$createElement;
-      Register.methods.closeRegister = this.closeRegister //手动注入Vue到实例
+      //手动注入Vue到实例
+      Register.methods.closeRegister = this.closeRegister
+
       this.$msgbox({
         title: `注册`,
         message: h(Register, { key: this.alertKey++ }),
@@ -117,6 +122,8 @@ export default {
     },
     login() {
       const h = this.$createElement;
+      //手动注入Vue到实例
+      Login.methods.closeLogin = this.closeLogin
       this.$msgbox({
         title: `登录`,
         message: h(Login, { key: this.alertKey++ }),

@@ -10,6 +10,10 @@ module.exports = {
 	'options /register': async (ctx) => {
 		ctx.body = 'CORS ok'
 	},
+	'options /login': async (ctx) => {
+		ctx.body = 'CORS ok'
+	},
+
 	'post /register': async (ctx) => {
 		// 接受客户端数据
 		const sid = ctx.cookies.get('sid')
@@ -37,9 +41,9 @@ module.exports = {
 	'post /login': async (ctx) => {
 		let { username, pwd } = ctx.request.body
 		let data = await login({ username, pwd })
-		if (!data) {
+		if (!data.data) {
 			ctx.status = 201
-			ctx.body = new ErrorModel(data, '用户不存在')
+			ctx.body = new ErrorModel(data, data.message)
 		} else {
 			ctx.body = new SuccessModel(data.data, data.message)
 		}

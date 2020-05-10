@@ -44,7 +44,7 @@
           round
           class="right"
           style="margin-right:25px"
-          @click="submitForm(formRules)"
+          @click="submitForm"
         >
           <i class="el-icon el-icon-check"></i></el-button>
       </el-form-item>
@@ -54,6 +54,7 @@
 
 <script>
 import throttle from "@/utils/throttle"
+import { login } from '@/http/user';
 export default {
   data() {
     return {
@@ -68,33 +69,42 @@ export default {
           { type: "string", pattern: /^[\w\u4e00-\u9f5a5\uac00-\ud7ff\u0800-\u4e00\-\_]{3,15}$/, message: "3~15位数字、字母、下划线，中日韩", trigger: "blur" },
           { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
         ],
+        pwd: [
+          { required: true, message: "请输入密码", trigger: "blur" }
+        ]
       }
     }
   },
   methods: {
+    // 重置表单
+    resetForm() {
+      this.$refs["formRef"].resetFields()
+    },
     //提交表单
-    submitForm(formRules) {
+    submitForm() {
       this.$refs["formRef"].validate(async (vaild) => {
         if (!vaild) return
         let body = {}
         body.username = this.formData.username
         body.pwd = this.formData.pwd
-        let { status, data } = await registerUser(body)
+        let { status, data } = await login(body)
+        console.log(status, data);
         if (status >= 200 && status < 300) {
           if (status === 201) {
             this.$message({
-              type: "success",
+              type: "warning",
               message: data.message
             })
-          } else {
-            this.closeRegister()
+          }
+          if (status === 200) {
+            this.closeLogin()
           }
         }
       })
     },
   },
   mounted() {
-
+    this.submitForm = throttle(this.submitForm, 2500)
   }
 
 }

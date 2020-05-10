@@ -29,7 +29,7 @@ module.exports.createUser = async ({ username, pwd, email }) => {
 module.exports.login = async ({ username, pwd }) => {
 	const data = await model[USER].findOne({ username }, { __v: 0, _id: 0 })
 	if (!data) {
-		return data
+		return { data, message: '用户不存在' }
 	}
 	if (pwd !== data.pwd) {
 		return { data: null, message: '密码错误' }

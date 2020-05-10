@@ -191,7 +191,7 @@ export default {
               message: data.message
             })
           } else {
-            this.closeRegister()
+            this.closeRegister() // 这个方法是weboack打包过程中手动注入的
           }
         }
       })
