@@ -18,7 +18,7 @@ module.exports = {
 		},
 		photo: {
 			type: String,
-			default: 'https://yssimage.oss-cn-hangzhou.aliyuncs.com/22.jpg',
+			default: 'http://localhost:8000/images/default_surface.jpg',
 		},
 		//是否是管理员
 		admin: {

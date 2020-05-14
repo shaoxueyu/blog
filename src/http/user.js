@@ -8,3 +8,7 @@ export const login = async (body) => {
 	const { status, data } = await axios.post('/user/login', body)
 	return { status, data }
 }
+export const getUserInfoToToken = async () => {
+	const { status, data } = await axios.get('/user/checkToken')
+	return { status, data }
+}

@@ -1,8 +1,5 @@
-const model = require('./mongodb/index')
 const RoutesLoader = require('./loaderPlugins/router-loader')
 const path = require('path')
-const jwt = require('jsonwebtoken')
-const jwtAuth = require('koa-jwt')
 const static = require('koa-static')
 const bodyParser = require('koa-bodyparser') //解析json
 const conf = {
@@ -11,13 +8,13 @@ const conf = {
 }
 const routesloader = new RoutesLoader()
 const app = routesloader.getApp() //返回koa实例
-app.use(async (ctx, next) => {	
+app.use(async (ctx, next) => {
 	ctx.set('Access-Control-Allow-Origin', ctx.headers['origin'])
 	//设置跨域
 	ctx.set('Access-Control-Allow-Credentials', true)
 	ctx.set(
 		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, Content-Type, Accept, If-Modified-Since'
+		'Origin, X-Requested-With, Content-Type, Accept, If-Modified-Since,Authorization'
 	)
 	ctx.set('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
 	await next()

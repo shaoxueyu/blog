@@ -37,3 +37,12 @@ module.exports.login = async ({ username, pwd }) => {
 		return { data, message: '登录成功' }
 	}
 }
+
+// 通过用户token来获取用户信息
+module.exports.getUserInfoToToken = async ({ email }) => {
+	const data = await model[USER].findOne(
+		{ email },
+		{ __v: 0, _id: 0, pwd: 0 }
+	)
+	return { data }
+}

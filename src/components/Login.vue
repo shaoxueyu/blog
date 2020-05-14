@@ -4,6 +4,7 @@
       :model="formData"
       :rules="formRules"
       ref="formRef"
+      @keyup.enter.native="submitForm"
     >
 
       <el-form-item
@@ -23,7 +24,7 @@
         prop="pwd"
       >
         <el-input
-          type="text"
+          type="password"
           v-model="formData.pwd"
           autocomplete="off"
           class="box"
@@ -97,6 +98,11 @@ export default {
             })
           }
           if (status === 200) {
+            window.localStorage.setItem("token", data["data"].token)
+            this.$message({
+              type: "success",
+              message: data.message
+            })
             this.closeLogin()
           }
         }

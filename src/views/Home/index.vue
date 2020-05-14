@@ -129,7 +129,6 @@ export default {
       let { status, data } = await getHotArticleInfo(3)
       if (status >= 200 && status < 300) {
         this.hotArticleInfo = data.data
-        console.log(this.hotArticleInfo);
       }
     },
     //继续发现
@@ -202,6 +201,9 @@ export default {
       },
       immediate: true
     }
+  },
+  created() {
+    console.log(1);
   },
   mounted() {
     this.handleApi()

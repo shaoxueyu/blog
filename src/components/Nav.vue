@@ -7,7 +7,10 @@
       <!-- log -->
       <div class="nav-left-logo left">Smallker · Blog</div>
       <!-- ?? -->
-      <div class="nav-right-login right">
+      <div
+        class="right nav-right-login"
+        v-if="!userInfo"
+      >
         <el-button
           type="primary"
           size="small"
@@ -18,6 +21,17 @@
           size="small"
           @click="register"
         >注 &nbsp 册</el-button>
+      </div>
+      <div
+        class="right nav-right-login user-info"
+        v-else-if="userInfo"
+      >
+        <span><img
+            alt="头像"
+            src="http://localhost:8000/images/default_surface.jpg"
+          ></span>
+        <span>{{userInfo.username}}</span>
+
       </div>
       <div
         class="small-nav"
@@ -57,6 +71,8 @@
 import throttle from "@/utils/throttle"
 import Register from "@/components/Register"
 import Login from "@/components/Login"
+import { store } from "@/vuex/index"
+import { getUserInfoToToken } from "@/http/user"
 export default {
   name: "Nav",
   data() {
@@ -118,7 +134,6 @@ export default {
         cancelButtonText: '取消',
         customClass: "message-box-register",
       }).then(null).catch(() => { })
-
     },
     login() {
       const h = this.$createElement;
@@ -140,11 +155,21 @@ export default {
       this.navSmActive = !this.navSmActive
     }
   },
+  async created() {
+    let { status, data } = await getUserInfoToToken()
+    console.log(status, data)
+    store.user = data.data
+  },
   mounted() {
+
   },
   computed: {
     routes() {
       return this.$route.path
+    },
+    userInfo() {
+      console.log(store);
+      return store.user
     }
   }
 }
@@ -295,6 +320,35 @@ export default {
     text-align: center;
     line-height: 50px;
     transform: translateY(5px);
+  }
+}
+.user-info {
+  height: 100%;
+  line-height: 60px;
+
+  span {
+    &:nth-child(1) {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 50%;
+      vertical-align: middle;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    &:nth-child(2) {
+      display: inline-block;
+      height: 100%;
+      text-align: center;
+      vertical-align: middle;
+      padding-left: 15px;
+      font-size: 18px;
+    }
   }
 }
 @media screen and (max-width: 1350px) {
