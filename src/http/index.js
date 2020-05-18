@@ -19,7 +19,12 @@ axios.interceptors.request.use(
 	}
 )
 //相应拦截
-axios.interceptors.response.use((response) => {
-	endLoading()
-	return response
-})
+axios.interceptors.response.use(
+	(response) => {
+		endLoading()
+		return response
+	},
+	(err) => {
+		endLoading()
+	}
+)

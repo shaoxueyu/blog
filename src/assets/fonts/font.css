@@ -7,5 +7,5 @@
 	src: url(./barbarahand-webfont.woff2) format('woff2');
 }
 html {
-	font-family: sunshineKing;
+	font-family: sunshineKing,sans-serif;
 }

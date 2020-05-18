@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="nav-page"
-    :style="{backgroundColor:navColor}"
-  >
+  <div id="nav-page">
     <div class="nav-container clearfix">
       <!-- log -->
       <div class="nav-left-logo left">Smallker · Blog</div>
@@ -107,11 +104,6 @@ export default {
       ]
     }
   },
-  props: {
-    navColor: {
-      type: String,
-    }
-  },
   methods: {
     closeRegister() {
       this.$msgbox.close()
@@ -123,6 +115,7 @@ export default {
       const h = this.$createElement;
       //手动注入Vue到实例
       Register.methods.closeRegister = this.closeRegister
+      Register.methods.openLogin = this.login
 
       this.$msgbox({
         title: `注册`,
@@ -156,9 +149,17 @@ export default {
     }
   },
   async created() {
-    let { status, data } = await getUserInfoToToken()
-    console.log(status, data)
-    store.user = data.data
+    try {
+      let { status, data } = await getUserInfoToToken()
+      console.log(status, data)
+      store.user = data.data
+    } catch (err) {
+      store.user = null
+      this.$message({
+        type: "warning",
+        message: "身份认证失败或已过期, 请重新登录"
+      })
+    }
   },
   mounted() {
 
@@ -199,11 +200,12 @@ export default {
   box-sizing: border-box;
   width: 100%;
   height: 60px;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.8);
   padding: 0 50px;
   border-bottom: 1px solid #e8e9e7;
   top: 0;
   left: 0;
+  font-size: 16px;
   .nav-container {
     position: relative;
     width: 1280px;
@@ -335,7 +337,7 @@ export default {
       overflow: hidden;
       border-radius: 50%;
       vertical-align: middle;
-
+      cursor: pointer;
       img {
         width: 100%;
         height: 100%;
@@ -345,9 +347,9 @@ export default {
       display: inline-block;
       height: 100%;
       text-align: center;
-      vertical-align: middle;
       padding-left: 15px;
       font-size: 18px;
+      cursor: pointer;
     }
   }
 }

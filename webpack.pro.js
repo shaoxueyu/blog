@@ -28,6 +28,20 @@ module.exports = smart(webpackBaseConfig, {
 					'less-loader',
 				],
 			},
+			{
+				test: /\.(png|gif|bmp|jpg|jpeg)$/,
+				use: [
+					{
+						loader: 'url-loader',
+						options: {
+							name: '[name].[hash:4].[ext]',
+							outputPath: 'assets/img',
+							publicPath: '/dist/assets/img',
+							limit: 5000,
+						},
+					},
+				],
+			},
 		],
 	},
 	plugins: [

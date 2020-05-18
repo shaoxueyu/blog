@@ -43,7 +43,6 @@ export default {
     background-image: url("../../assets/images/bg-daily.jpg");
     background-size: cover;
     background-position: center center;
-    background-attachment: fixed;
     filter: blur(5px);
   }
   .daily-container {

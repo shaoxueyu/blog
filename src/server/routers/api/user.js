@@ -80,7 +80,8 @@ module.exports = {
 			})
 		})
 		if (err) {
-			return (ctx.body = new ErrorModel('用户验证身份失败，请重新登录'))
+			ctx.status = 401
+			return ctx.body = new ErrorModel('用户验证身份失败，请重新登录')
 		}
 		let data = await getUserInfoToToken({ email: res.data.email })
 		ctx.body = new SuccessModel(data.data, '身份认证成功')

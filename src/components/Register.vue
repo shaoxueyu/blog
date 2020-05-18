@@ -5,6 +5,7 @@
       class="rule-form"
       :rules="formRules"
       :model="formData"
+      @keyup.enter.native="submitForm"
     >
       <el-form-item
         label="用户名："
@@ -85,7 +86,7 @@
           round
           class="right"
           style="margin-right:25px"
-          @click="submitForm(formRules)"
+          @click="submitForm"
         >
           <i class="el-icon el-icon-check"></i></el-button>
       </el-form-item>
@@ -171,11 +172,10 @@ export default {
     this.getVcode()
     this.throttleRegetVcode()
     this.submitForm = throttle(this.submitForm, 3000)
-
   },
   methods: {
     //提交表单
-    submitForm(formRules) {
+    submitForm() {
       this.$refs["formRef"].validate(async (vaild) => {
         if (!vaild) return
         let body = {}
@@ -185,13 +185,21 @@ export default {
         body.email = this.formData.email
         let { status, data } = await registerUser(body)
         if (status >= 200 && status < 300) {
-          if (status === 201 || status === 200) {
+          if (status === 200) {
             this.$message({
               type: "success",
               message: data.message
             })
-          } else {
-            this.closeRegister() // 这个方法是weboack打包过程中手动注入的
+            this.closeRegister()
+            setTimeout(() => {
+              this.openLogin()
+            },200)
+          } else if (status === 201) {
+            this.$message({
+              type: "warning",
+              message: data.message
+            })
+            // 这个方法是weboack打包过程中手动注入的
           }
         }
       })

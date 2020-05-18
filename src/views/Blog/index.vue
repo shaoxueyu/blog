@@ -179,6 +179,7 @@ export default {
     },
     handleScroll() {
       this.ifFixed = document.documentElement.scrollTop >= 900;
+
     }
 
   },

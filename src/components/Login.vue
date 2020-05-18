@@ -55,7 +55,8 @@
 
 <script>
 import throttle from "@/utils/throttle"
-import { login } from '@/http/user';
+import { login, getUserInfoToToken } from '@/http/user';
+import { store } from "@/vuex/index"
 export default {
   data() {
     return {
@@ -99,6 +100,8 @@ export default {
           }
           if (status === 200) {
             window.localStorage.setItem("token", data["data"].token)
+            let res = await getUserInfoToToken()
+            store.user = res.data.data
             this.$message({
               type: "success",
               message: data.message

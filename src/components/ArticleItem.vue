@@ -74,10 +74,11 @@ export default {
     async handlerSroll(e) {
       // 滚动高
       const scrollTop = document.documentElement.scrollTop
-      // 可是高
+      // 可视高
       const clientHeight = document.documentElement.clientHeight
       //文档高
       const offsetHeight = document.documentElement.offsetHeight
+
       if (scrollTop + clientHeight > offsetHeight - 100) {
         let { status, data } = await getArticleInfo(this.page + 1, this.pagesize, this.$route.meta.tag)
         this.articlelist = [...this.articlelist, ...data.data]
@@ -95,11 +96,19 @@ export default {
     //滚动滑轮触发scrollFunc方法 //ie 谷歌 
     window.onmousewheel = document.onmousewheel = this.handlerSroll;
   },
+  destroyed() {
+    if (document.addEventListener) {
+      document.removeEventListener("DOMMouseScroll", this.handlerSroll)
+    }
+    window.onmousewheel = document.onmousewheel = null
+    window.removeEventListener("scroll", this.handlerSroll)
+    console.log("清除");
+  },
   watch: {
     "$route": {
       async handler($route) {
         this.page = 1
-        window.scrollTo(0,0)
+        window.scrollTo(0, 0)
         if ($route.meta.tag) {
           let { data, status } = await getArticleInfo(1, 5, $route.meta.tag)
           this.articlelist = data.data
@@ -120,6 +129,7 @@ export default {
 .article-inner {
   margin-top: 5px;
   width: calc(100% - 100px);
+  font-size: 23px;
   .article-item {
     overflow: hidden;
     position: relative;
@@ -229,11 +239,12 @@ export default {
         height: 180px;
         overflow: hidden;
         padding: 20px 15px;
+        font-size: 17px;
+        line-height: 35px;
         p {
           overflow: hidden;
           width: 100%;
           height: 100%;
-          line-height: 25px;
           text-indent: 1em;
         }
       }
