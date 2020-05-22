@@ -7,10 +7,11 @@ class RoutesLoader {
 	constructor() {
 		this.$app = new Koa()
 		this.$router = new Router()
-  }
-  getApp(){
-    return this.$app
-  }
+		RoutesLoader.app = this.$app
+	}
+	getApp() {
+		return this.$app
+	}
 	handleFileLoader(dir) {
 		const files = fs.readdirSync(dir)
 		console.log(files)
@@ -29,9 +30,9 @@ class RoutesLoader {
 	 * @param {F:\\QQPCmgr\\Desktop\\nodejs学习\\nodejs_MVC\\routes\\user.js} jsFileDir
 	 */
 	routerLoader(jsFileDir) {
-    const fileCtx = require(jsFileDir)
+		const fileCtx = require(jsFileDir)
 		const pattern = /routers([^\"]+)/
-    ///api/test
+		///api/test
 		const prefix = jsFileDir
 			.match(pattern)[1]
 			.replace(/\\/g, '/')
@@ -54,7 +55,7 @@ class RoutesLoader {
 		this.$app.use(this.$router.routes())
 		this.$app.listen(conf.port, () => {
 			console.log(`server started on ${conf.port}`)
-    })
+		})
 	}
 }
 module.exports = RoutesLoader

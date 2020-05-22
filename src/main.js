@@ -7,6 +7,7 @@ import './assets/css/global.css'
 import './assets/css/animate.min.css'
 import './assets/fonts/font.css'
 import '@/plugins/index'
+import Nav from "@/components/Nav"
 
 new Vue({
 	render: (h) => h(App),

@@ -1,5 +1,4 @@
 /* const model = require('../mongodb/index.js')
-
 const mock = require('mockjs')
 let data = mock.mock({
 	'data|1000': [
@@ -21,3 +20,11 @@ let data = mock.mock({
 })
 
 model['article'].create(data.data) */
+
+const model = require('../mongodb/index.js')
+const mongoose = require("mongoose")
+model['message'].create({
+	user: mongoose.Types.ObjectId('5eba22e09abc4a2bcc094945'),
+	content: '<p>测试</p>',
+	date: Date.now(),
+})

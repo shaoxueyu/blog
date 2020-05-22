@@ -42,7 +42,7 @@ module.exports.login = async ({ username, pwd }) => {
 module.exports.getUserInfoToToken = async ({ email }) => {
 	const data = await model[USER].findOne(
 		{ email },
-		{ __v: 0, _id: 0, pwd: 0 }
+		{ __v: 0, pwd: 0 }
 	)
 	return { data }
 }

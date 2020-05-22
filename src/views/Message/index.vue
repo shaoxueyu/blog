@@ -6,28 +6,60 @@
     <div class="message-content">
       <el-card>
         <article>
-          <h3>留言板</h3>
+          <h3>留言板 <strong style="font-family:smallkerBoom;font-size:35px;font-weight:bolder">Message Board</strong></h3>
           <h4>留不住你的人，但要留住你的心 <strong>❤</strong></h4>
         </article>
         <textarea
-          id="demo"
+          id="edit"
           style="display: none;"
         ></textarea>
+        <button
+          class="layui-btn"
+          @click="submitMessage"
+        >提交留言</button>
 
       </el-card>
+    </div>
+    <!-- 用户留言 -->
+    <div class="message-list">
+
     </div>
 
   </div>
 </template>
 
 <script>
+import { store } from "@/vuex/index"
 export default {
+  data() {
+    return {
+      commentList:[
+        {
+         
+        }
+      ]
+    }
+  },
+  methods: {
+    submitMessage() {
+      // 登录并且有权限的才能留言
+      if (store.user && !store.user.disabled) {
+
+      } else if (store.user && store.user.disabled) {
+        this.layer.msg("由于发表不正当言论，您被禁言", { icon: 2 })
+      } else {
+        this.layer.msg("请先登录", { icon: 2 })
+      }
+    }
+  },
   mounted() {
-    layui.use('layedit', function () {
-      console.log(1);
-      let layedit = layui.layedit;
-      layedit.build('demo'); //建立编辑器
+    layui.use('layedit', () => {
+      this.layedit = layui.layedit;
+      this.index = this.layedit.build('edit'); //建立编辑器
     });
+    layui.use("layer", () => {
+      this.layer = layui.layer
+    })
   }
 }
 </script>
@@ -35,6 +67,9 @@ export default {
 <style lang="less" scoped>
 #Message-page {
   padding-top: 60px;
+}
+/deep/.layui-layedit {
+  margin: 50px 0;
 }
 .message-cover {
   z-index: -1;
@@ -48,6 +83,7 @@ export default {
   filter: blur(2px);
 }
 .el-card {
+  background-color: #ffffffde;
   margin-top: 45px;
   h3 {
     text-align: center;

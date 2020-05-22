@@ -67,13 +67,13 @@ export default {
     }
   }
 }
-.el-card.slideInRight:nth-child(1){
-  animation-delay: .1s;
+.el-card.slideInRight:nth-child(1) {
+  animation-delay: 0.1s;
 }
-.el-card.slideInRight:nth-child(2){
-  animation-delay: .5s;
+.el-card.slideInRight:nth-child(2) {
+  animation-delay: 0.5s;
 }
-.el-card.slideInRight:nth-child(3){
+.el-card.slideInRight:nth-child(3) {
   animation-delay: 1s;
 }
 .about-web {
@@ -102,6 +102,11 @@ export default {
 .about-content {
   width: 1280px;
   margin: 50px auto 25px;
+}
+@media screen and (max-width: 1360px) {
+  .about-content {
+    width: 90%;
+  }
 }
 .article-item {
   h2 {
@@ -135,6 +140,11 @@ export default {
         font-size: 14px;
       }
     }
+  }
+}
+@media screen and (max-width:770px) {
+  /deep/.article-item section p:nth-child(1){
+    line-height: 35px;
   }
 }
 </style>

@@ -146,7 +146,7 @@ export default {
     },
     MenuActive() {
       this.navSmActive = !this.navSmActive
-    }
+    },
   },
   async created() {
     try {
@@ -155,14 +155,10 @@ export default {
       store.user = data.data
     } catch (err) {
       store.user = null
-      this.$message({
-        type: "warning",
-        message: "身份认证失败或已过期, 请重新登录"
-      })
     }
   },
   mounted() {
-
+    console.log(this);
   },
   computed: {
     routes() {
