@@ -22,7 +22,7 @@ module.exports = {
 					required: true,
 				},
 				//评论对象
-				$user: {
+				toUser: {
 					type: Schema.Types.ObjectId,
 					ref: 'user',
 					required: true,
@@ -30,7 +30,7 @@ module.exports = {
         // 评论时间
 				date: {
 					type: Date,
-					require: true,
+					required: true,
 				},
 			},
 		],

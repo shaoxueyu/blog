@@ -78,11 +78,13 @@ export default {
       const clientHeight = document.documentElement.clientHeight
       //文档高
       const offsetHeight = document.documentElement.offsetHeight
-
+      console.log(scrollTop + clientHeight > offsetHeight - 100);
       if (scrollTop + clientHeight > offsetHeight - 100) {
         let { status, data } = await getArticleInfo(this.page + 1, this.pagesize, this.$route.meta.tag)
-        this.articlelist = [...this.articlelist, ...data.data]
-        this.page++ //只有当请求到了数据，并且显示在页面上才会加+1
+        if (status === 200) {
+          this.articlelist = [...this.articlelist, ...data.data]
+          this.page++ //只有当请求到了数据，并且显示在页面上才会加+1
+        }
       }
     }
   },
@@ -102,7 +104,6 @@ export default {
     }
     window.onmousewheel = document.onmousewheel = null
     window.removeEventListener("scroll", this.handlerSroll)
-    console.log("清除");
   },
   watch: {
     "$route": {

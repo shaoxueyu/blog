@@ -22,9 +22,17 @@ let data = mock.mock({
 model['article'].create(data.data) */
 
 const model = require('../mongodb/index.js')
-const mongoose = require("mongoose")
+const mongoose = require('mongoose')
 model['message'].create({
 	user: mongoose.Types.ObjectId('5eba22e09abc4a2bcc094945'),
 	content: '<p>测试</p>',
 	date: Date.now(),
+	children: [
+		{
+			user: mongoose.Types.ObjectId('5ec0142175fd9c2430ef5ca9'),
+			toUser: mongoose.Types.ObjectId('5eba22e09abc4a2bcc094945'),
+			content: '<p>回复测试</p>',
+			date: Date.now()
+		},
+	],
 })

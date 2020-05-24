@@ -18,7 +18,6 @@ export default {
     }
   },
   mounted() {
-
     setTimeout(() => {
       window.scroll(0, 0)
     })
