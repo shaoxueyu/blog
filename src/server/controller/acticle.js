@@ -6,7 +6,6 @@ module.exports.getArticleTagsInfo = async () => {
 	return data
 }
 module.exports.getHotArticleInfo = async (pagesize) => {
-	console.log(pagesize);
 	const data = await model[ARTICLE].find(
 		{},
 		{ __v: 0, _id: 0 },

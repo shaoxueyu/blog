@@ -6,7 +6,7 @@ module.exports = {
 		//留言内容
 		content: { type: String, required: true },
 		//日期
-		date: { type: Date, require: true },
+		date: { type: String, require: true },
 		//子留言
 		children: [
 			{
@@ -29,7 +29,7 @@ module.exports = {
         },
         // 评论时间
 				date: {
-					type: Date,
+					type: String,
 					required: true,
 				},
 			},

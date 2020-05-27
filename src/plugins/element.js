@@ -14,6 +14,7 @@ import {
 import Vue from 'vue'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.prototype.$msgbox = MessageBox
+Vue.prototype.$confirm = MessageBox.confirm
 Vue.prototype.$message = Message
 export default {
 	Button,

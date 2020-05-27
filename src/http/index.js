@@ -9,7 +9,7 @@ axios.interceptors.request.use(
 	(config) => {
 		startLoading()
 		const token = window.localStorage.getItem('token')
-		if (token && /\/user/.test(config.url)) {
+		if (token && /\/user|\/message/.test(config.url)) {
 			config.headers.common['Authorization'] = 'Bearer ' + token
 		}
 		return config
@@ -26,5 +26,6 @@ axios.interceptors.response.use(
 	},
 	(err) => {
 		endLoading()
+		return Promise.reject(err)
 	}
 )

@@ -67,29 +67,33 @@ export default {
     return {
       articlelist: [],
       page: 1,
-      pagesize: 5
+      pagesize: 5,
+      tip: true //塞子
     }
   },
   methods: {
     async handlerSroll(e) {
+      if (!this.tip) return
       // 滚动高
       const scrollTop = document.documentElement.scrollTop
       // 可视高
       const clientHeight = document.documentElement.clientHeight
       //文档高
       const offsetHeight = document.documentElement.offsetHeight
-      console.log(scrollTop + clientHeight > offsetHeight - 100);
-      if (scrollTop + clientHeight > offsetHeight - 100) {
+
+      if (scrollTop + clientHeight > offsetHeight - 200) {
+        this.tip = false
         let { status, data } = await getArticleInfo(this.page + 1, this.pagesize, this.$route.meta.tag)
         if (status === 200) {
           this.articlelist = [...this.articlelist, ...data.data]
           this.page++ //只有当请求到了数据，并且显示在页面上才会加+1
+          this.tip = true
         }
       }
     }
   },
   mounted() {
-    this.handlerSroll = throttle(this.handlerSroll, 2000)
+    this.handlerSroll = throttle(this.handlerSroll, 150)
     window.addEventListener("scroll", this.handlerSroll)
     //给页面绑定滑轮滚动事件 
     if (document.addEventListener) {//firefox 
