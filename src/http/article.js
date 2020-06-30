@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from 'axios'
 
 //博客搜索栏文章
 export const getArticleTagsInfo = async () => {
@@ -33,4 +33,19 @@ export const getArticleInfo = async (
 		valve = true
 		return { data, status }
 	} else return
+}
+export const getArticleDetail = async (id) => {
+	const { status, data } = await axios.post('/article/getArticleDetail', {
+		id,
+	})
+	return { status, data }
+}
+//搜索
+export const search = async (keywords) => {
+	const { status, data } = await axios.get('/article/search', {
+		params: {
+			keywords,
+		},
+	})
+	return { status, data }
 }

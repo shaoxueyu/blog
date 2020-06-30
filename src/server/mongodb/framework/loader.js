@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 function load(dir, cb) {
 	// 获取绝对路径(这里是文件夹)
@@ -29,7 +30,7 @@ const loadModel = (config) => {
 	const model = {}
 
 	load('../model', (filename, { schema }) => {
-		model[filename] = mongoose.model(filename, schema)
+		model[filename] = mongoose.model(filename, new Schema(schema))
 	})
 	return model
 }

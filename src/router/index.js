@@ -6,13 +6,18 @@ Vue.use(Router)
 
 const routes = [
 	{
-		path:"/",
-		redirect:"/home"
+		path: '/',
+		redirect: '/home',
 	},
 	{
 		path: '/about',
 		name: 'about',
 		component: () => import('../views/About/index.vue'),
+	},
+	{
+		path: '/article/:id',
+		name: 'article',
+		component: () => import('../views/Article/index.vue'),
 	},
 	{
 		redirect: '/blog/all',
@@ -77,6 +82,12 @@ const routes = [
 		path: '/message',
 		name: 'message',
 		component: () => import('../views/Message/index.vue'),
+	},
+	{
+		path: '*',
+		name: '/404',
+		component: () =>
+			import(/* webpackChunkName: "NotFound"*/ '@/views/404/index.vue'),
 	},
 ]
 

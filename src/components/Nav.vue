@@ -158,11 +158,16 @@ export default {
     }
   },
   mounted() {
-    console.log(this);
+    console.log(this,"----");
   },
   computed: {
     routes() {
-      return this.$route.path
+      if (this.$route.path.indexOf("/article") !== -1) {
+        return "/blog"
+      } else {
+        return this.$route.path
+      }
+
     },
     userInfo() {
       console.log(store);

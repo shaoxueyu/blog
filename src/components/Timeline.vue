@@ -2,15 +2,13 @@
   <div class="timeline-block animated slideInRight">
     <el-timeline>
       <el-timeline-item
-        timestamp="2018/4/12"
+        timestamp="2020/6/4"
         placement="top"
       >
         <el-card>
-          <h4>更新 Github 模板</h4>
-          <p>王小虎 提交于 2018/4/12 20:46</p>
+          <h4>今天又是元气满满的一天</h4>
         </el-card>
       </el-timeline-item>
-    
     </el-timeline>
   </div>
 </template>

@@ -16,9 +16,8 @@
           <div>{{new Date(item.date).getMonth() + 1}}月 &nbsp &nbsp {{new Date(item.date).getFullYear()}}</div>
         </div>
         <div class="content">
-          <a
-            href="
-          #"
+          <router-link
+            :to="`/article/${item._id}`"
             class="clearfix"
           >
             <div class="left left-content">
@@ -31,9 +30,9 @@
 
             </div>
             <div class="right right-content ">
-              <p>{{item.content}}</p>
+              <p>{{item.des}}</p>
             </div>
-          </a>
+          </router-link>
         </div>
 
         <div class="item-tip clearfix">

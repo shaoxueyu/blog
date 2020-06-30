@@ -15,6 +15,20 @@
               v-model="keywordSearch"
             ></el-input>
             <i class="el-icon el-icon-search"></i>
+            <div
+              class="search-detail"
+              v-show="searchDetail.length !== 0"
+            >
+              <ul @mouseover="searchMove($event)">
+                <li
+                  v-for="item in searchDetail"
+                  :key="item._id"
+                  class="search-li"
+                >
+                  {{item.title}}
+                </li>
+              </ul>
+            </div>
           </div>
           <!-- 文章分类选项 -->
           <ul
@@ -49,8 +63,11 @@
               :key="item.title"
               class="aside-hot-li"
               :data-index=index+1
-            ><a href="#">
-                {{item.title}} </a></li>
+            >
+              <router-link :to="`/article/${item._id}`">
+                {{item.title}}
+              </router-link>
+            </li>
           </ul>
         </div>
         <div class="aside-visitor">
@@ -141,7 +158,9 @@
 </template>
 <script>
 import Nav from "@/components/Nav"
-import { getArticleTagsInfo, getHotArticleInfo } from "@/http/article"
+import { getArticleTagsInfo, getHotArticleInfo, search } from "@/http/article"
+import currentTime from '@/utils/currentTime';
+import throttle from '../../utils/throttle';
 export default {
   data() {
     return {
@@ -149,7 +168,8 @@ export default {
       articleTagsList: [..."loading... ".repeat(6).split(" ").filter(item => item !== "")],
       hotArticleList: [..."loading... ".repeat(8).split(" ").filter(item => item !== "")],
       liTopcover: 25,
-      ifFixed: false
+      ifFixed: false,
+      searchDetail: [] // 搜索关键字得到的结果
     }
   },
   methods: {
@@ -163,6 +183,34 @@ export default {
       if (status1 === 200) {
         this.hotArticleList = data1.data
       }
+    },
+    //关键字搜索
+    async getKeywordSearch(keywordSearch) {
+      try {
+        let { status, data } = await search(keywordSearch)
+        if (status >= 200 || status < 300) {
+          this.searchDetail = data.data
+        }
+      } catch (e) {
+        this.$message({
+          type: "error",
+          message: "数据请求失败"
+        })
+      }
+    },
+    // 搜索栏动画
+    searchMove(e){
+      let self = this
+      
+      // 先做一次清除
+      self.storeActiveClassArr.forEach(item => {
+        item.classList.remove("active")
+      })
+      
+      e.target.classList.add("active")
+      self.storeActiveClassArr.push(e.target)
+
+      
     },
     handleUlCover(e) {
       /* 利用事件委托 */
@@ -179,17 +227,18 @@ export default {
     },
     handleScroll() {
       this.ifFixed = document.documentElement.scrollTop >= 900;
-
     }
-
+  },
+  beforeCreate(){
+    this.storeActiveClassArr = []
   },
   created() {
     this.handleApi()
+    this.getKeywordSearch = throttle(this.getKeywordSearch, 1000)
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll)
   },
-
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll)
   },
@@ -199,6 +248,16 @@ export default {
         this.liTopcover = 25 + (value - 1) * 40
       },
       immediate: true
+    },
+    "keywordSearch": {
+      handler(value) {
+        value = value.trim()
+        if (value === "") {
+          this.searchDetail = []
+          return
+        }
+        this.getKeywordSearch(value)
+      }
     }
   },
   components: {
@@ -211,6 +270,41 @@ export default {
 </script>
 
 <style lang="less" scoped>
+/deep/.el-input input {
+  z-index: 101;
+  position: relative;
+  outline: none;
+  border: none;
+  &:focus{
+    outline: none;
+    border: none !important;
+  }
+}
+.search-detail {
+  box-sizing: border-box;
+  z-index: 100;
+  height: 300px;
+  padding-top: 40px;
+  background-color: #fff;
+  position: absolute;
+  top: 32px;
+  width: calc(100% - 40px);
+  border: 1px solid #dcdfe6;
+  border-top: none;
+  border-radius: 20px;
+  overflow-y: auto;
+  .search-li {
+    line-height: 33px;
+    text-indent: 1em;
+    font-size: 13px;
+    transition: background-color .3s;
+    &.active{
+      background-color: #bbb;
+      color: #fff;
+      cursor: pointer;
+    }
+  }
+}
 #blog-page {
   position: relative;
   padding-top: 60px;

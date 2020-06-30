@@ -1,3 +1,4 @@
+const Schema = require('mongoose').Schema
 module.exports = {
 	schema: {
 		username: {
@@ -29,6 +30,11 @@ module.exports = {
 		disabled: {
 			type: Boolean,
 			default: false,
+		},
+		user: {
+			type: Schema.Types.ObjectId,
+			ref: 'user',
+			required: true,
 		},
 	},
 }

@@ -2,9 +2,14 @@ const {
 	getHotArticleInfo,
 	getArticleTagsInfo,
 	getArticleInfo,
+	getArticleDetail,
+	search
 } = require('../../controller/acticle')
 const { SuccessModel, ErrorModel } = require('../../BaseModel/index')
 module.exports = {
+	'options /getArticleDetail': (ctx) => {
+		ctx.status = 201
+	},
 	//博客搜索数据
 	'get /articleTagsInfo': async (ctx) => {
 		try {
@@ -38,5 +43,16 @@ module.exports = {
 		} catch (e) {
 			ctx.body = new ErrorModel(e, 'error')
 		}
+	},
+	// 文章详情
+	'post /getArticleDetail': async (ctx) => {
+		const id = ctx.request.body.id
+		let data = await getArticleDetail(id)
+		ctx.body = new SuccessModel(data)
+	},
+	'get /search': async (ctx) => {
+		const keywords = ctx.request.query.keywords
+		const data = await search(keywords)
+		ctx.body = new SuccessModel(data)
 	},
 }
