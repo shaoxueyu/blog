@@ -20,13 +20,19 @@
               v-show="searchDetail.length !== 0"
             >
               <ul @mouseover="searchMove($event)">
-                <li
+                <router-link
                   v-for="item in searchDetail"
                   :key="item._id"
-                  class="search-li"
+                  :to="`/article/${item._id}` "
                 >
-                  {{item.title}}
-                </li>
+                  <li
+                    class="search-li"
+                    :data-key=item.title
+                    ref="searchLiRef"
+                  >
+                  </li>
+                </router-link>
+
               </ul>
             </div>
           </div>
@@ -173,6 +179,8 @@ export default {
     }
   },
   methods: {
+    //柯里化节流
+    throttled() { },
     //接口统一处理
     async handleApi() {
       let { status, data } = await getArticleTagsInfo()
@@ -199,18 +207,19 @@ export default {
       }
     },
     // 搜索栏动画
-    searchMove(e){
+    searchMove(e) {
+      e.stopPropagation()
       let self = this
-      
+
       // 先做一次清除
       self.storeActiveClassArr.forEach(item => {
         item.classList.remove("active")
       })
-      
+
       e.target.classList.add("active")
       self.storeActiveClassArr.push(e.target)
 
-      
+
     },
     handleUlCover(e) {
       /* 利用事件委托 */
@@ -229,12 +238,13 @@ export default {
       this.ifFixed = document.documentElement.scrollTop >= 900;
     }
   },
-  beforeCreate(){
+  beforeCreate() {
     this.storeActiveClassArr = []
   },
   created() {
     this.handleApi()
-    this.getKeywordSearch = throttle(this.getKeywordSearch, 1000)
+    this.throttled = throttle(this.throttled, 1000)
+    /*  this.getKeywordSearch = throttle(this.getKeywordSearch, 1000) */
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll)
@@ -250,13 +260,23 @@ export default {
       immediate: true
     },
     "keywordSearch": {
-      handler(value) {
+      async handler(value) {
         value = value.trim()
         if (value === "") {
           this.searchDetail = []
-          return
+          return;
         }
-        this.getKeywordSearch(value)
+        if (this.throttled()) {
+          await this.getKeywordSearch(value)
+          this.$nextTick(() => {
+            this.$refs.searchLiRef.forEach(el => {
+              console.log(el.dataset);
+              el.innerHTML = el.dataset.key.replace(this.keywordSearch, `<span style="color:#6bc30d;font-weight:bold">${this.keywordSearch}</span>`)
+
+            })
+          })
+        }
+
       }
     }
   },
@@ -275,7 +295,7 @@ export default {
   position: relative;
   outline: none;
   border: none;
-  &:focus{
+  &:focus {
     outline: none;
     border: none !important;
   }
@@ -297,8 +317,8 @@ export default {
     line-height: 33px;
     text-indent: 1em;
     font-size: 13px;
-    transition: background-color .3s;
-    &.active{
+    transition: background-color 0.3s;
+    &.active {
       background-color: #bbb;
       color: #fff;
       cursor: pointer;

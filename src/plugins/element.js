@@ -9,7 +9,12 @@ import {
 	Timeline,
 	TimelineItem,
 	Card,
-	Message
+	Message,
+	Dropdown,
+	DropdownMenu,
+	DropdownItem,
+	Dialog,
+	Upload
 } from 'element-ui'
 import Vue from 'vue'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -26,4 +31,9 @@ export default {
 	Timeline,
 	TimelineItem,
 	Card,
+	Dropdown,
+	DropdownMenu,
+	DropdownItem,
+	Dialog,
+	Upload
 }

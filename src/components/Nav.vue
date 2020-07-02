@@ -23,11 +23,22 @@
         class="right nav-right-login user-info"
         v-else-if="userInfo"
       >
-        <span><img
-            alt="头像"
-            src="http://localhost:8000/images/default_surface.jpg"
-          ></span>
-        <span>{{userInfo.username}}</span>
+        <el-dropdown trigger="click">
+
+          <span class="el-dropdown-link">
+            <img
+              alt="头像"
+              :src="userInfo.photo"
+            >
+          </span>
+          <span>{{userInfo.username}}</span>
+
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item icon="el-icon-user-solid" @click.native="modifyAv">修改头像</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-switch-button" @click.native="logout">退出登录</el-dropdown-item>
+
+          </el-dropdown-menu>
+        </el-dropdown>
 
       </div>
       <div
@@ -68,6 +79,7 @@
 import throttle from "@/utils/throttle"
 import Register from "@/components/Register"
 import Login from "@/components/Login"
+import Avatar from "@/components/Avatar"
 import { store } from "@/vuex/index"
 import { getUserInfoToToken } from "@/http/user"
 export default {
@@ -105,6 +117,28 @@ export default {
     }
   },
   methods: {
+    // 修改头像
+    modifyAv(){
+       const h = this.$createElement
+        this.$msgbox({
+        title: `修改头像`,
+        message: h(Avatar, { key: this.alertKey++ }),
+        showCancelButton: false,
+        showConfirmButton: false,
+        closeOnClickModal: false,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass: "message-box-avatar",
+      }).then(null).catch(() => { })
+    },
+    logout(){
+      this.$confirm("是否退出登录","提示",{
+        type:"warning"
+      }).then(() => {
+        window.localStorage.removeItem("token")
+        store.user = null
+      }).catch(() =>{})
+    },
     closeRegister() {
       this.$msgbox.close()
     },
@@ -158,7 +192,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this,"----");
+    console.log(this, "----");
   },
   computed: {
     routes() {
@@ -350,7 +384,6 @@ export default {
       text-align: center;
       padding-left: 15px;
       font-size: 18px;
-      cursor: pointer;
     }
   }
 }

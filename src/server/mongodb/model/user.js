@@ -1,4 +1,3 @@
-const Schema = require('mongoose').Schema
 module.exports = {
 	schema: {
 		username: {
@@ -17,6 +16,7 @@ module.exports = {
 			type: String,
 			required: true,
 		},
+		// 头像
 		photo: {
 			type: String,
 			default: 'http://localhost:8000/images/default_surface.jpg',
@@ -30,11 +30,6 @@ module.exports = {
 		disabled: {
 			type: Boolean,
 			default: false,
-		},
-		user: {
-			type: Schema.Types.ObjectId,
-			ref: 'user',
-			required: true,
 		},
 	},
 }

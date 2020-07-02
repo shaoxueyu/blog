@@ -10,7 +10,10 @@
           <p class="author-box">
             <span class="author-span">作者:</span>
             <span class="author-name"> {{article.author ? article.author.username:""}} </span>
-            <span class="author-pv" style="margin-left:7px">点击量:</span>
+            <span
+              class="author-pv"
+              style="margin-left:7px"
+            >点击量:</span>
             <span> {{article.pv}} </span>
             <span style="margin-left:7px">发布时间:</span>
             <span> {{article.date | timeFormat}} </span>
@@ -30,44 +33,47 @@ import { getArticleDetail } from '@/http/article';
 export default {
   data() {
     return {
-      article: {}
+      article: {},
+      id: ""
     }
   },
-  computed: {
-    id() {
-      return this.$route.params.id
+  watch: {
+    "$route": {
+      async handler(to) {
+        this.id = to.params.id
+        const { status, data } = await getArticleDetail(this.id)
+        if(status >= 200 || status < 300){
+          if(!data.data){
+            return window.location.href = "/#/404.html"
+          }
+          this.article = data.data
+        }
+      
+      },
+      immediate: true
     }
   },
   async created() {
-    const { status, data } = await getArticleDetail(this.id)
-    if (status === 200) {
-      this.article = data.data
-      console.log(this.article);
-    } else {
-      this.$message({
-        message: "未知错误",
-        type: "error"
-      })
-    }
+
   },
   mounted() {
 
   },
-  filters:{
-    timeFormat(value){
+  filters: {
+    timeFormat(value) {
       const date = new Date(value).toLocaleDateString()
-      return date.replace(/\//g,"-")
+      return date.replace(/\//g, "-")
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.article-container{
-  padding:0 25px 25px 25px;
+.article-container {
+  padding: 0 25px 25px 25px;
   line-height: 36px;
 }
-.author-box{
+.author-box {
   padding-bottom: 10px;
   margin-top: 1px;
   font-size: 13px;
@@ -77,14 +83,14 @@ export default {
 
 #article-page {
   padding-top: 60px;
-  animation: appear .4s;
+  animation: appear 0.4s;
 }
 @keyframes appear {
-  from{
+  from {
     visibility: hidden;
     opacity: 0;
   }
-  to{
+  to {
     visibility: visible;
     opacity: 1;
   }
@@ -111,7 +117,7 @@ export default {
       overflow: hidden;
       font-size: 24px;
       line-height: 45px;
-     /*  border-bottom: 1px solid #adb2b852; */
+      /*  border-bottom: 1px solid #adb2b852; */
     }
   }
 }

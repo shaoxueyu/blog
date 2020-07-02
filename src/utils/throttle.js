@@ -7,10 +7,12 @@ function throttle(fn, delay) {
 		let nowTime = Date.now()
 		if (nowTime - lastTime > delay) {
 			fn.apply(this, args) // 修正this指向问题
-
 			// 同步时间
 			lastTime = nowTime
+			return true
 		}
+		return false
+		
 	}
 }
 export default throttle

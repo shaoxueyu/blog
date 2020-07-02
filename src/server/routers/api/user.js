@@ -1,6 +1,8 @@
 const { session } = require('../../session/index')
 const { SuccessModel, ErrorModel } = require('../../BaseModel/index')
 const jwt = require('jsonwebtoken')
+const upload = require('../../../utils/upload')
+const checkToken = require('../../../utils/checktoken')
 const secret = 'Smallker'
 const opt = {
 	secret: 'Smallker',
@@ -11,6 +13,7 @@ const {
 	createUser,
 	login,
 	getUserInfoToToken,
+	updateUserInfo,
 } = require('../../controller/user')
 module.exports = {
 	//跨域
@@ -22,6 +25,9 @@ module.exports = {
 	},
 	'options /checkToken': async (ctx) => {
 		ctx.body = 'CORS ok'
+	},
+	'options /upload/avatar': async (ctx) => {
+		ctx.status = 201
 	},
 	'post /register': async (ctx) => {
 		// 接受客户端数据
@@ -81,20 +87,27 @@ module.exports = {
 		})
 		if (err) {
 			ctx.status = 401
-			return ctx.body = new ErrorModel('用户验证身份失败，请重新登录')
+			return (ctx.body = new ErrorModel('用户验证身份失败，请重新登录'))
 		}
 		let data = await getUserInfoToToken({ email: res.data.email })
 		ctx.body = new SuccessModel(data.data, '身份认证成功')
 	},
-
-	/* jwt.verify(token, secret, async (err, res) => {
-			if (err)
-				return (ctx.body = new ErrorModel(
-					'用户验证身份失败，请重新登录'
-				))
-			console.log(res)
-			let data = await getUserInfoToToken({ email: res.data.email })
+	'post /upload/avatar': async (ctx) => {
+		let { err, res } = await checkToken(ctx)
+		if (err) {
+			ctx.status = 401
+			return (ctx.body = new ErrorModel('身份过期，重新登录'))
+		}
+		if (res) {
+			await upload.single('file')(ctx)
+			const data = await updateUserInfo({
+				email: res.data.email,
+				photo: `http://localhost:8000/user/${ctx.req.file.filename}`,
+			})
 			console.log(data)
-			ctx.body = new SuccessModel(data.data, '身份认证成功')
-		}) */
+			ctx.body = new SuccessModel({
+				photo: `http://localhost:8000/user/${ctx.req.file.filename}`,
+			})
+		}
+	},
 }

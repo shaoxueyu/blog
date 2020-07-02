@@ -40,9 +40,22 @@ module.exports.login = async ({ username, pwd }) => {
 
 // 通过用户token来获取用户信息
 module.exports.getUserInfoToToken = async ({ email }) => {
-	const data = await model[USER].findOne(
-		{ email },
-		{ __v: 0, pwd: 0 }
-	)
+	const data = await model[USER].findOne({ email }, { __v: 0, pwd: 0 })
 	return { data }
+}
+// 修改用户头像
+module.exports.updateUserInfo = async ({ email, photo }) => {
+	try {
+		const data_find = await model[USER].findOne({ email }, { _id: 1 })
+		if (!data_find) {
+			return { data_find, message: '无此用户' }
+		}
+		const data_update = await model[USER].updateOne(
+			{ _id: data_find._id },
+			{ $set: { photo } }
+		)
+		console.log(data_update)
+	} catch (err) {
+		console.log(err)
+	}
 }

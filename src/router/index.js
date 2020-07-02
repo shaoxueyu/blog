@@ -90,7 +90,7 @@ const routes = [
 			import(/* webpackChunkName: "NotFound"*/ '@/views/404/index.vue'),
 	},
 ]
-
-export default new Router({
+const router = new Router({
 	routes,
 })
+export default router

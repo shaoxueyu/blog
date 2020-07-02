@@ -61,8 +61,8 @@ export default {
   data() {
     return {
       formData: {
-        username: "",
-        pwd: ""
+        username: "shaoxueyu",
+        pwd: "sxy654730917"
       },
       formRules: {
         username: [
